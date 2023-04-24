@@ -13,7 +13,12 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
+import { getCompanies } from './models/companies';
+import { getCourses } from './models/courses';
+import { getEducations } from './models/educations';
+import { getLanguages } from './models/languages';
 import { getSkills } from './models/skills';
+import { getUsers } from './models/users';
 
 
 export const app = express();

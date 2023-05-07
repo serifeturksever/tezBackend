@@ -13,16 +13,24 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
+
+
 import { getCompanies } from './models/companies';
 import { getCourses } from './models/courses';
 import { getEducations } from './models/educations';
 import { getLanguages } from './models/languages';
 import { getSkills } from './models/skills';
 import { getUsers } from './models/users';
+import { _get } from './routes/user/get';
+import { router as userRouter } from './routes/user/routes';
+
 
 
 export const app = express();
+const http = require("http");
 
+
+app.use('/user', userRouter)
 // Configure body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,16 +38,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Configure CORS
 app.use(cors());
 
-setTimeout(async () => {
-    // console.time("dbsave")
-    let skill = await getSkills()
-    // console.timeEnd("dbsave")
-  });
 
-// Define a route
-app.get('/', (req, res) => {
-  res.send('hi');
-});
+export const server = http.createServer(app);
+
+// app.get('/', (req, res) => {
+//   res.send('hi');
+// });
+
+
 
 // Start the server
 app.listen(3001, () => {

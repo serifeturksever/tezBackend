@@ -1,0 +1,72 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getUsers = void 0;
+const app_1 = require("../app");
+const collectionRead = app_1.mongodbRead.collection('users');
+const collectionWrite = app_1.mongodbWrite.collection('users');
+// export const getUsers = async (): Promise<any> => {
+//     return collectionRead.find({}).toArray()
+// }
+const getUsers = (full_name, location) => __awaiter(void 0, void 0, void 0, function* () {
+    // const {
+    //   location,
+    //   full_name,
+    // } = params;
+    // let { dataCount } = params;
+    // let { startData } = params;
+    // if (!dataCount) {
+    //   dataCount = 1
+    // }
+    // else if (dataCount > 10000) {
+    //   dataCount = 10000;
+    // }
+    let filter = {};
+    if (full_name) {
+        filter["full_name"] = { $regex: new RegExp(`${full_name}`, "i") };
+    }
+    if (location) {
+        filter["location"] = { $regex: new RegExp(`${location}`, "i") };
+    }
+    console.log("flter", filter);
+    let value = yield collectionRead.aggregate([
+        {
+            $facet: {
+                "data": [
+                    {
+                        $match: filter
+                    },
+                    {
+                        "$project": {
+                            "_id": 0,
+                            "id": "$_id",
+                            "full_name": 1,
+                            "location": 1,
+                        }
+                    },
+                    // { $skip: startData ? startData : 0 },
+                    // { $limit: dataCount }
+                ],
+                //   'count': [
+                //     {
+                //       '$match': filter
+                //     }, {
+                //       '$count': 'count'
+                //     }
+                //   ]
+            }
+        }
+    ]).toArray();
+    // console.log("value",JSON.stringify(value))
+    return Promise.resolve(value);
+});
+exports.getUsers = getUsers;
+//# sourceMappingURL=users.js.map

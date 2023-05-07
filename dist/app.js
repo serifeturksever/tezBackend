@@ -26,9 +26,9 @@ exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Configure CORS
 exports.app.use((0, cors_1.default)());
 exports.server = http.createServer(exports.app);
-// app.get('/', (req, res) => {
-//   res.send('hi');
-// });
+exports.app.get('/', (req, res) => {
+    res.send('hi');
+});
 // Start the server
 exports.app.listen(3001, () => {
     console.log('Server started on port 3001');

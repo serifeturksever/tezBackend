@@ -16,11 +16,8 @@ const collectionWrite = app_1.mongodbWrite.collection('users');
 // export const getUsers = async (): Promise<any> => {
 //     return collectionRead.find({}).toArray()
 // }
-const getUsers = (full_name, location) => __awaiter(void 0, void 0, void 0, function* () {
-    // const {
-    //   location,
-    //   full_name,
-    // } = params;
+const getUsers = (params) => __awaiter(void 0, void 0, void 0, function* () {
+    const { full_name, about, location, } = params;
     // let { dataCount } = params;
     // let { startData } = params;
     // if (!dataCount) {
@@ -33,10 +30,13 @@ const getUsers = (full_name, location) => __awaiter(void 0, void 0, void 0, func
     if (full_name) {
         filter["full_name"] = { $regex: new RegExp(`${full_name}`, "i") };
     }
+    if (about) {
+        filter["about"] = { $regex: new RegExp(`${about}`, "i") };
+    }
     if (location) {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
     }
-    console.log("flter", filter);
+    console.log("filter", filter);
     let value = yield collectionRead.aggregate([
         {
             $facet: {
@@ -49,7 +49,10 @@ const getUsers = (full_name, location) => __awaiter(void 0, void 0, void 0, func
                             "_id": 0,
                             "id": "$_id",
                             "full_name": 1,
-                            "location": 1,
+                            "image": 1,
+                            "about": 1,
+                            "connection_count": 1,
+                            "location": 1
                         }
                     },
                     // { $skip: startData ? startData : 0 },
@@ -66,7 +69,9 @@ const getUsers = (full_name, location) => __awaiter(void 0, void 0, void 0, func
         }
     ]).toArray();
     // console.log("value",JSON.stringify(value))
-    return Promise.resolve(value);
+    console.log("value", value[0].data);
+    // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
+    return Promise.resolve(value[0].data);
 });
 exports.getUsers = getUsers;
 //# sourceMappingURL=users.js.map

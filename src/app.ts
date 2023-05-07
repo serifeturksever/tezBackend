@@ -41,9 +41,9 @@ app.use(cors());
 
 export const server = http.createServer(app);
 
-// app.get('/', (req, res) => {
-//   res.send('hi');
-// });
+app.get('/', (req, res) => {
+  res.send('hi');
+});
 
 
 

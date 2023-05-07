@@ -4,9 +4,9 @@ import { mongodbRead, mongodbWrite } from '../app';
 export interface USER {
     "_id"?: ObjectId;
     "full_name"?: string;
-    "image": string;
-    "about": string;
-    "connection_count": string; 
+    "image"?: string;
+    "about"?: string;
+    "connection_count"?: string; 
     "location"?: string;
 }
 
@@ -17,12 +17,14 @@ const collectionWrite = mongodbWrite.collection('users');
 //     return collectionRead.find({}).toArray()
 // }
 
-export const getUsers = async (full_name?,location?): Promise<any> => {
+export const getUsers = async (params: USER): Promise<any> => {
 
-    // const {
-    //   location,
-    //   full_name,
-    // } = params;
+    const {
+      full_name,
+      about,
+      location,
+      // connection_count -> ekle
+    } = params;
   
     // let { dataCount } = params;
     // let { startData } = params;
@@ -39,11 +41,14 @@ export const getUsers = async (full_name?,location?): Promise<any> => {
     if (full_name) {
       filter["full_name"] = { $regex: new RegExp(`${full_name}`, "i") };
     }
+    if (about) {
+      filter["about"] = { $regex: new RegExp(`${about}`, "i") };
+    }
     if (location) {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
       }
   
-   console.log("flter",filter)
+   console.log("filter",filter)
 
     let value = await collectionRead.aggregate([
       {
@@ -57,8 +62,10 @@ export const getUsers = async (full_name?,location?): Promise<any> => {
                 "_id": 0,
                 "id": "$_id",
                 "full_name": 1,
-                "location": 1,
-
+                "image": 1,
+                "about": 1,
+                "connection_count": 1,
+                "location": 1
               }
             },
             // { $skip: startData ? startData : 0 },
@@ -75,5 +82,8 @@ export const getUsers = async (full_name?,location?): Promise<any> => {
       }
     ]).toArray()
    // console.log("value",JSON.stringify(value))
-    return Promise.resolve(value);
+   console.log("value", value[0].data)
+    
+   // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
+    return Promise.resolve(value[0].data);
   }

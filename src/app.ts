@@ -21,7 +21,7 @@ import { getEducations } from './models/educations';
 import { getLanguages } from './models/languages';
 import { getSkills } from './models/skills';
 import { getUsers } from './models/users';
-import { _get } from './routes/user/get';
+//import { _get } from './routes/user/get';
 import { router as userRouter } from './routes/user/routes';
 
 
@@ -38,6 +38,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Configure CORS
 app.use(cors());
 
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Origin', 'Accept', 'Accept-Language', 'X-Requested-With', 'Content-Type', 'Authorization', 'Referer', 'Source', 'User-Agent', 'tkn', 'rtkn']
+}
+
+app.use('*', cors(corsOptions))
+
 
 export const server = http.createServer(app);
 
@@ -45,6 +54,9 @@ app.get('/', (req, res) => {
   res.send('hi');
 });
 
+// app.post('/', (req,res)=>{
+//    res.send('hi');
+// })
 
 
 // Start the server

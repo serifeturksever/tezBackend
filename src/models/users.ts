@@ -13,12 +13,13 @@ export interface USER {
 const collectionRead = mongodbRead.collection('users');
 const collectionWrite = mongodbWrite.collection('users');
 
-// export const getUsers = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
+// TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
 
-export const getUsers = async (params: USER): Promise<any> => {
+export const getUsers = async (): Promise<any> => {
+  return collectionRead.find().toArray()
+}
 
+export const filterUsers = async (params: USER): Promise<any> => {
     const {
       full_name,
       about,

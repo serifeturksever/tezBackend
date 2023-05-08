@@ -16,6 +16,7 @@ exports.mongodbWrite = mongoClient.db("bitirmetezi");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
+//import { _get } from './routes/user/get';
 const routes_1 = require("./routes/user/routes");
 exports.app = (0, express_1.default)();
 const http = require("http");
@@ -25,10 +26,28 @@ exports.app.use(body_parser_1.default.json());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 // Configure CORS
 exports.app.use((0, cors_1.default)());
+const corsOptions = {
+    // origin: (origin, callback) => {
+    //   console.log(origin)
+    //     if (whitelist.indexOf(origin) !== -1) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // },
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Origin', 'Accept', 'Accept-Language', 'X-Requested-With', 'Content-Type', 'Authorization', 'Referer', 'Source', 'User-Agent', 'tkn', 'rtkn']
+};
+exports.app.use('*', (0, cors_1.default)(corsOptions));
 exports.server = http.createServer(exports.app);
 exports.app.get('/', (req, res) => {
     res.send('hi');
 });
+// app.post('/', (req,res)=>{
+//    res.send('hi');
+// })
 // Start the server
 exports.app.listen(3001, () => {
     console.log('Server started on port 3001');

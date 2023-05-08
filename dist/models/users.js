@@ -9,15 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsers = void 0;
+exports.filterUsers = exports.getUsers = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('users');
 const collectionWrite = app_1.mongodbWrite.collection('users');
-// export const getUsers = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getUsers = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { full_name, about, location, } = params;
+// TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
+const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find().toArray();
+});
+exports.getUsers = getUsers;
+const filterUsers = (params) => __awaiter(void 0, void 0, void 0, function* () {
+    const { full_name, about, location,
+    // connection_count -> ekle
+     } = params;
     // let { dataCount } = params;
     // let { startData } = params;
     // if (!dataCount) {
@@ -73,5 +77,5 @@ const getUsers = (params) => __awaiter(void 0, void 0, void 0, function* () {
     // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
     return Promise.resolve(value[0].data);
 });
-exports.getUsers = getUsers;
+exports.filterUsers = filterUsers;
 //# sourceMappingURL=users.js.map

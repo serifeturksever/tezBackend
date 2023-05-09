@@ -1,0 +1,1 @@
+1. Check the tsc-watch and nodemon system. They should be run for the whole system.

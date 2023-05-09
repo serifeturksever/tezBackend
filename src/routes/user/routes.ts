@@ -6,4 +6,4 @@ export const router = express.Router();
 
 router
   .get('/', _get)
-  .post('filterUsers', _filterUsers)
+  .post('/filterUsers', _filterUsers)

@@ -10,11 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._filterUsers = void 0;
+const users_1 = require("../../models/users");
 const _filterUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("filter users post");
-    // let dummy_user = req.body
-    // let data = await filterUsers(dummy_user)
-    // if(data){res.send(data)} else {console.log("data yok")}
+    console.log(req.body);
+    let dummy_user = req.body;
+    let data = yield (0, users_1.filterUsers)(dummy_user);
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
 });
 exports._filterUsers = _filterUsers;
 //# sourceMappingURL=post.js.map

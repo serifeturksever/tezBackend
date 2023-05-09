@@ -13,8 +13,6 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 
-
-
 import { getCompanies } from './models/companies';
 import { getCourses } from './models/courses';
 import { getEducations } from './models/educations';
@@ -24,42 +22,22 @@ import { getUsers } from './models/users';
 //import { _get } from './routes/user/get';
 import { router as userRouter } from './routes/user/routes';
 
-
-
 export const app = express();
 const http = require("http");
+export const server = http.createServer(app); // FIXME: Is this neccessary ?
 
-
-app.use('/user', userRouter)
-// Configure body-parser
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Configure CORS
-app.use(cors());
-
-const corsOptions = {
-  origin: true,
-  credentials: true,
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Origin', 'Accept', 'Accept-Language', 'X-Requested-With', 'Content-Type', 'Authorization', 'Referer', 'Source', 'User-Agent', 'tkn', 'rtkn']
-}
-
-app.use('*', cors(corsOptions))
-
-
-export const server = http.createServer(app);
+// Configure express
+app
+  .use(bodyParser.json())
+  .use(bodyParser.urlencoded({ extended: true }))
+  .use(cors())
+  .use('/user', userRouter)
 
 app.get('/', (req, res) => {
-  res.send('hi');
+  res.send('hii');
 });
-
-// app.post('/', (req,res)=>{
-//    res.send('hi');
-// })
-
 
 // Start the server
-app.listen(3001, () => {
+server.listen(3001, () => {
   console.log('Server started on port 3001');
-});
+}); 

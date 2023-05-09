@@ -1,9 +1,9 @@
 import express from 'express';
 import { _get } from './get';
-import { _filterUsers } from './post';
+import { _filter } from './post';
 
 export const router = express.Router();
 
 router
   .get('/', _get)
-  .post('/filterUsers', _filterUsers)
+  .post('/filter', _filter)

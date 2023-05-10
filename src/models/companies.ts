@@ -11,11 +11,15 @@ export interface COMPANY {
 const collectionRead = mongodbRead.collection('companies');
 const collectionWrite = mongodbWrite.collection('companies');
 
-// export const getCompanies = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
+export const getCompanies = async (): Promise<any> => {
+    return collectionRead.find().toArray()
+}
 
-export const getCompanies = async (name?): Promise<any> => {
+export const getUserCompanies = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.find({"user_id": userId}).toArray()
+}
+
+export const filterCompanies = async (name?): Promise<any> => {
 
     // const {
     //   _id,

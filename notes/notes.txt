@@ -1,2 +1,5 @@
 1. Route isimlendirmelerininin üzerinden geçilebilir
 2. main-v2 (son kullanılan branch, içerisinde get ve filter yapıldı user için) -> all-restAPI-system
+3. Dateler nasıl olacak ? string/Date
+4. Filter İçerisindeki aggregate yerine filter kullanılabilir mi ?
+5. post.ts içerisindeki -> let data = await filterSkills(dummy_user) kısmındaki parametre dummy_user kalkacak o gitmezse ne gidecek bakılacak

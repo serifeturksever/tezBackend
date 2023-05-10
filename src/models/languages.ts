@@ -12,11 +12,15 @@ export interface LANGUAGE {
 const collectionRead = mongodbRead.collection('languages');
 const collectionWrite = mongodbWrite.collection('languages');
 
-// export const getLanguages = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
+export const getLanguages = async (): Promise<any> => {
+    return collectionRead.find().toArray()
+}
 
-export const getLanguages = async (params: LANGUAGE): Promise<any> => {
+export const getUserLanguages = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.find({"user_id": userId}).toArray()
+}
+
+export const filterLanguages = async (params: LANGUAGE): Promise<any> => {
 
     const {
       _id,

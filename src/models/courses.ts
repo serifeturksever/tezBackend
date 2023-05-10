@@ -12,11 +12,15 @@ export interface COURSE {
 const collectionRead = mongodbRead.collection('courses');
 const collectionWrite = mongodbWrite.collection('courses');
 
-// export const getCourses = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
+export const getCourses = async (): Promise<any> => {
+    return collectionRead.find().toArray()
+}
 
-export const getCourses = async (title?,company_id?): Promise<any> => {
+export const getUserCourses = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.find({"user_id": userId}).toArray()
+}
+
+export const filterCourses = async (title?,company_id?): Promise<any> => {
 
     // const {
     //   _id,

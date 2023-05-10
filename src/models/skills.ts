@@ -11,11 +11,15 @@ export interface SKILL {
 const collectionRead = mongodbRead.collection('skills');
 const collectionWrite = mongodbWrite.collection('skills');
 
-// export const getSkills = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
+export const getSkills = async (): Promise<any> => {
+    return collectionRead.find({}).toArray()
+}
 
-export const getSkills = async (params: SKILL): Promise<any> => {
+export const getUserSkills = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.find({"user_id": userId}).toArray()
+}
+
+export const filterSkills = async (params: SKILL): Promise<any> => {
 
     const {
       _id,

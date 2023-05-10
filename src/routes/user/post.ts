@@ -1,6 +1,7 @@
 import express from 'express';
 import { filterUsers } from '../../models/users';
 
+// What types of POST should be included ?
 
 export const _filter = async (req,res) => {
     console.log(req.body)

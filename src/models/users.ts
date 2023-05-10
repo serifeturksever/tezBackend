@@ -14,6 +14,8 @@ const collectionRead = mongodbRead.collection('users');
 const collectionWrite = mongodbWrite.collection('users');
 
 // TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
+// FIXME: userId parametre olarak objectId mi alsın ?
+// Company içerisinde userId yok ?
 
 export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()

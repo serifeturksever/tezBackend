@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCourses = void 0;
+exports.filterCourses = exports.getUserCourses = exports.getCourses = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('courses');
 const collectionWrite = app_1.mongodbWrite.collection('courses');
-// export const getCourses = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getCourses = (title, company_id) => __awaiter(void 0, void 0, void 0, function* () {
+const getCourses = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find().toArray();
+});
+exports.getCourses = getCourses;
+const getUserCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "user_id": userId }).toArray();
+});
+exports.getUserCourses = getUserCourses;
+const filterCourses = (title, company_id) => __awaiter(void 0, void 0, void 0, function* () {
     // const {
     //   _id,
     //   title,
@@ -88,5 +93,5 @@ const getCourses = (title, company_id) => __awaiter(void 0, void 0, void 0, func
         .toArray();
     return Promise.resolve(value);
 });
-exports.getCourses = getCourses;
+exports.filterCourses = filterCourses;
 //# sourceMappingURL=courses.js.map

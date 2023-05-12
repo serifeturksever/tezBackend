@@ -18,6 +18,8 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 //import { _get } from './routes/user/get';
 const routes_1 = require("./routes/user/routes");
+const routes_2 = require("./routes/favourite/routes");
+const routes_3 = require("./routes/auth/routes");
 exports.app = (0, express_1.default)();
 const http = require("http");
 exports.server = http.createServer(exports.app); // FIXME: Is this neccessary ?
@@ -26,7 +28,9 @@ exports.app
     .use(body_parser_1.default.json())
     .use(body_parser_1.default.urlencoded({ extended: true }))
     .use((0, cors_1.default)())
-    .use('/user', routes_1.router);
+    .use('/user', routes_1.router)
+    .use('/favourite', routes_2.router)
+    .use('/auth', routes_3.router);
 exports.app.get('/', (req, res) => {
     res.send('hii');
 });

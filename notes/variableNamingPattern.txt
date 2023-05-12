@@ -1,0 +1,4 @@
+DB -> _
+Postman -> camelCase
+nodejs -> camelCase
+func -> camelCase

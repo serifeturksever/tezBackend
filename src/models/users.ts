@@ -90,3 +90,4 @@ export const filterUsers = async (params: USER): Promise<any> => {
    // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
     return Promise.resolve(value[0].data);
   }
+

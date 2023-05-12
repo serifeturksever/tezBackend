@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCompanies = void 0;
+exports.filterCompanies = exports.getUserCompanies = exports.getCompanies = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('companies');
 const collectionWrite = app_1.mongodbWrite.collection('companies');
-// export const getCompanies = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getCompanies = (name) => __awaiter(void 0, void 0, void 0, function* () {
+const getCompanies = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find().toArray();
+});
+exports.getCompanies = getCompanies;
+const getUserCompanies = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "user_id": userId }).toArray();
+});
+exports.getUserCompanies = getUserCompanies;
+const filterCompanies = (name) => __awaiter(void 0, void 0, void 0, function* () {
     // const {
     //   _id,
     //   name,
@@ -86,5 +91,5 @@ const getCompanies = (name) => __awaiter(void 0, void 0, void 0, function* () {
         .toArray();
     return Promise.resolve(value);
 });
-exports.getCompanies = getCompanies;
+exports.filterCompanies = filterCompanies;
 //# sourceMappingURL=companies.js.map

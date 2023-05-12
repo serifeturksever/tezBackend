@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._filterUsers = void 0;
+exports._filter = void 0;
 const users_1 = require("../../models/users");
-const _filterUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+// What types of POST should be included ?
+const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, users_1.filterUsers)(dummy_user);
@@ -22,5 +23,5 @@ const _filterUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         console.log("data yok");
     }
 });
-exports._filterUsers = _filterUsers;
+exports._filter = _filter;
 //# sourceMappingURL=post.js.map

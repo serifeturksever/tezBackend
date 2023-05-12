@@ -21,6 +21,8 @@ import { getSkills } from './models/skills';
 import { getUsers } from './models/users';
 //import { _get } from './routes/user/get';
 import { router as userRouter } from './routes/user/routes';
+import { router as favouriteRouter } from './routes/favourite/routes';
+import { router as authRouter } from './routes/auth/routes';
 
 export const app = express();
 const http = require("http");
@@ -32,6 +34,8 @@ app
   .use(bodyParser.urlencoded({ extended: true }))
   .use(cors())
   .use('/user', userRouter)
+  .use('/favourite', favouriteRouter)
+  .use('/auth', authRouter)
 
 app.get('/', (req, res) => {
   res.send('hii');

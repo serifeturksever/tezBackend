@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLanguages = void 0;
+exports.filterLanguages = exports.getUserLanguages = exports.getLanguages = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('languages');
 const collectionWrite = app_1.mongodbWrite.collection('languages');
-// export const getLanguages = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getLanguages = (params) => __awaiter(void 0, void 0, void 0, function* () {
+const getLanguages = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find().toArray();
+});
+exports.getLanguages = getLanguages;
+const getUserLanguages = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "user_id": userId }).toArray();
+});
+exports.getUserLanguages = getUserLanguages;
+const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id, title, user_id, level,
     //   image,
     //   about,
@@ -88,5 +93,5 @@ const getLanguages = (params) => __awaiter(void 0, void 0, void 0, function* () 
         .toArray();
     return Promise.resolve(value);
 });
-exports.getLanguages = getLanguages;
+exports.filterLanguages = filterLanguages;
 //# sourceMappingURL=languages.js.map

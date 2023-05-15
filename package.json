@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --watch './**/*.ts' --exec 'ts-node' --inspect=0.0.0.0:9301  index.ts",
+    "start": "nodemon --watch './**/*.ts' --exec 'ts-node' index.ts",
     "dev:server": "ts-node index.ts"
   },
   "repository": {
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "bent": "^7.3.12",
     "dotenv": "^16.0.3",
     "mongodb": "^5.2.0",
     "mongoose": "^7.1.1",

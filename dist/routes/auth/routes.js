@@ -9,5 +9,6 @@ const post_1 = require("./post");
 exports.router = express_1.default.Router();
 exports.router
     //.get('/', _get)
-    .post('/signup', post_1._signup);
+    .post('/signup', post_1._signup)
+    .post('/login', post_1._login);
 //# sourceMappingURL=routes.js.map

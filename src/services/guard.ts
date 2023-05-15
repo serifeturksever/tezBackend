@@ -5,6 +5,22 @@ import { v4 as uuidv4 } from 'uuid';
 import express, { request } from 'express';
 import { VARIABLES } from '../app';
 
+// export interface IGuard {
+//   ip: string;
+//   header: object;
+//   source: string;
+//   origin: string;
+//   acceptLanguage: string;
+//   token: string;
+//   refreshToken: string;
+//   payload: object;
+// }
+
+// export interface IToken {
+//   userId: string;
+//   userName?: string;
+// }
+
 const randomNumber = require("random-number-csprng");
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);

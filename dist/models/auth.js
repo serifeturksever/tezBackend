@@ -9,18 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createMember = exports.memberEmailExists = exports.signup = void 0;
+exports.getHashedPasswordByEmail = exports.createMember = exports.memberEmailExists = exports.signup = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('member');
-const collectionWrite = app_1.mongodbWrite.collection('member');
+const collectionRead = app_1.mongodbRead.collection('members');
+const collectionWrite = app_1.mongodbWrite.collection('members');
 const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
     // const emailRegex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9_\-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\.[a-zA-Z]+$', 'gm');
     // if (emailRegex.test(signupInfo.email)) {
     // }
     const emailExists = yield (0, exports.memberEmailExists)(signupInfo.email);
+    console.log("emailex", emailExists);
     if (emailExists == null) {
-        let month = (new Date().getMonth() + 1).toString();
-        month = month.length > 1 ? month : "0" + month;
         const memberData = {
             "name": signupInfo.name,
             "surname": signupInfo.surname,
@@ -30,11 +29,10 @@ const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
             "createdAt": new Date().getTime(),
         };
         const member = yield (0, exports.createMember)(memberData);
+        console.log("member", member);
         return {
             "status": "ok",
             "": "msg",
-            "userId": "" + member.msg.id,
-            "userName": member.msg.username,
         };
     }
     else {
@@ -92,4 +90,19 @@ const createMember = (memberData) => __awaiter(void 0, void 0, void 0, function*
     return collectionWrite.insertOne(memberData);
 });
 exports.createMember = createMember;
+const getHashedPasswordByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield collectionRead.findOne({
+        "email": email
+    }, {
+        "projection": {
+            "_id": 1,
+            "password": 1,
+            "name": 1,
+            "surname": 1,
+            "username": 1,
+        }
+    });
+    return Promise.resolve(user);
+});
+exports.getHashedPasswordByEmail = getHashedPasswordByEmail;
 //# sourceMappingURL=auth.js.map

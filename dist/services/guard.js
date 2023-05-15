@@ -36,6 +36,20 @@ exports.Crypt = void 0;
 const crypto = __importStar(require("crypto"));
 const bcrypt = __importStar(require("bcrypt"));
 const uuid_1 = require("uuid");
+// export interface IGuard {
+//   ip: string;
+//   header: object;
+//   source: string;
+//   origin: string;
+//   acceptLanguage: string;
+//   token: string;
+//   refreshToken: string;
+//   payload: object;
+// }
+// export interface IToken {
+//   userId: string;
+//   userName?: string;
+// }
 const randomNumber = require("random-number-csprng");
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);

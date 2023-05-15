@@ -9,13 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._signup = void 0;
+exports._login = exports._signup = void 0;
 //import { requestChecker } from '../../app';
 const guard_1 = require("../../services/guard");
 const auth_1 = require("../../models/auth");
 // import { getHashedPassword, updatePassword } from '../../models/users';
 var randomNumber = require("random-number-csprng");
 const _signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("req.body", req.body);
     const crypt = new guard_1.Crypt();
     let [name, surname, username, email, password, repassword] = [
         req.body.name,
@@ -26,41 +27,75 @@ const _signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         req.body.repassword,
     ];
     const hashedPassword = yield crypt.hash(password);
-    const p = new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
-        if (repassword != password) {
-            reject({
-                status: "error",
-                msg: "Password check failed!",
-            });
-            return;
-        }
-        const register = yield (0, auth_1.signup)({
-            name,
-            surname,
-            username,
-            hashedPassword,
-            email,
+    if (repassword != password) {
+        res.send({
+            status: "error",
+            msg: "Password check failed!",
         });
-        if (register.status == "ok") {
-            resolve({
-                status: "ok",
-                msg: "",
-                //"token": guardData.token
-            });
-        }
-        else {
-            reject({
-                status: "error",
-                //"msg": saveCompany.msg
-            });
-        }
-    }));
-    p.then(data => {
-        // 👇️ .then block ran:  Success message
-        console.log('.then block ran: ', data);
-    }).catch(err => {
-        console.log('.catch block ran: ', err);
+        return;
+    }
+    const register = yield (0, auth_1.signup)({
+        name,
+        surname,
+        username,
+        hashedPassword,
+        email,
     });
+    console.log("register", register);
+    if (register.status == "ok") {
+        res.send({
+            status: "ok",
+            msg: "",
+            //"token": guardData.token
+        });
+    }
+    else {
+        res.send({
+            status: "error",
+            //"msg": saveCompany.msg
+        });
+    }
 });
 exports._signup = _signup;
+const _login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const email = req.body.email;
+    const password = req.body.password;
+    const data = yield (0, auth_1.getHashedPasswordByEmail)(email);
+    if (data) {
+        const crypt = new guard_1.Crypt();
+        const comparePassword = yield crypt.compareHashes(password, data.password);
+        if (comparePassword) {
+            try {
+                // res.locals.guard = guardData;
+                res.send({
+                    status: "ok",
+                    msg: "",
+                });
+            }
+            catch (ex) {
+                res.send({
+                    status: "error",
+                    msg: "Invalid login info",
+                    resStatus: 400,
+                });
+            }
+        }
+        else {
+            res.send({
+                status: "error",
+                msg: "Invalid login info 2",
+                resStatus: 400,
+            });
+        }
+    }
+    else {
+        res.send({
+            status: "error",
+            msg: "Invalid login info",
+            resStatus: 400,
+        });
+    }
+});
+exports._login = _login;
+// https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all
 //# sourceMappingURL=post.js.map

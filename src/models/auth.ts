@@ -18,8 +18,8 @@ export interface IMEMBER {
     "password": string;
     "createdAt": number;
 }
-const collectionRead = mongodbRead.collection('member');
-const collectionWrite = mongodbWrite.collection('member');
+const collectionRead = mongodbRead.collection('members');
+const collectionWrite = mongodbWrite.collection('members');
 
 export const signup = async (signupInfo: ISIGNUP) => {
 
@@ -29,11 +29,9 @@ export const signup = async (signupInfo: ISIGNUP) => {
   // }
 
   const emailExists = await memberEmailExists(signupInfo.email);
-
+console.log("emailex",emailExists)
   if (emailExists == null) {
 
-    let month = (new Date().getMonth() + 1).toString();
-    month = month.length > 1 ? month : "0" + month;
 
     const memberData: IMEMBER = {
       "name": signupInfo.name,
@@ -46,12 +44,11 @@ export const signup = async (signupInfo: ISIGNUP) => {
 
     const member = await createMember(memberData);
 
+    console.log("member",member)
    
     return {
       "status": "ok",
       "": "msg",
-      "userId": "" + member.msg.id,
-      "userName": member.msg.username,
     }
 
   }
@@ -120,4 +117,24 @@ export const memberEmailExists = async (email: string): Promise<any> => {
 
 export const createMember = async (memberData: IMEMBER): Promise<any> => {
     return collectionWrite.insertOne(memberData);
+}
+
+export const getHashedPasswordByEmail = async (email: string): Promise<any> => {
+  const user = await collectionRead.findOne(
+      {
+          "email": email
+      },
+      {
+          "projection": {
+              "_id": 1,
+              "password": 1,
+              "name": 1,
+              "surname": 1,
+              "username": 1,
+          }
+      }
+  )
+
+  return Promise.resolve(user);
+
 }

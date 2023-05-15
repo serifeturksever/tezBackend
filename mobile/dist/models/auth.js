@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHashedPasswordByEmail = exports.createMember = exports.memberEmailExists = exports.signup = void 0;
+exports.updatePasswordByUserId = exports.checkEmail = exports.createMember = exports.memberEmailExists = exports.forgotPassword = exports.signup = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('members');
 const collectionWrite = app_1.mongodbWrite.collection('members');
@@ -43,45 +43,23 @@ const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.signup = signup;
-// export const forgotPassword = async (email: string, hashedPassword: string): Promise<any> => {
-//   const user = await getUserIdByEmail(email);
-//   const result = {
-//     "status": "ok",
-//     "msg": ""
-//   };
-//   if (user) {
-//     updatePasswordByUserId(user._id, hashedPassword).then();
-//     result.msg = `${user.surname.toUpperCase()} ${user.name}`;
-//   }
-//   else {
-//     result.status = 'error';
-//     result.msg = "Email doesn\'t exists";
-//   }
-//   return Promise.resolve(result);
-// }
-// export const getHashedPasswordByEmail = async (email: string): Promise<any> => {
-//   const user = await getUserHashedPasswordByEmail(email);
-//   if (user) {
-//     const company = await getCompanyLoginInfo(user.company_id);
-//     return Promise.resolve({
-//       "status": "ok",
-//       "userId": "" + user._id,
-//       "userName": `${user.surname.toUpperCase()} ${user.name}`,
-//       "userLanguage": user.language || "en",
-//       "userRole": user.userRole,
-//       "password": user.password,
-//       "departmentIds": user.department_ids,
-//       "companyId": "" + company._id,
-//       "companyName": company.name,
-//       "companyStatus": company.status,
-//       "companyNextPaymentTryDate": company.nextPaymentTryDate,
-//       "companyLogo": company.logo
-//     })
-//   }
-//   else {
-//     return Promise.resolve(null);
-//   }
-// }
+const forgotPassword = (email, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield (0, exports.checkEmail)(email);
+    const result = {
+        "status": "ok",
+        "msg": ""
+    };
+    if (user) {
+        (0, exports.updatePasswordByUserId)(user._id, hashedPassword).then();
+        result.msg = `${user.surname.toUpperCase()} ${user.name}`;
+    }
+    else {
+        result.status = 'error';
+        result.msg = "Email doesn\'t exists";
+    }
+    return Promise.resolve(result);
+});
+exports.forgotPassword = forgotPassword;
 const memberEmailExists = (email) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({ "email": email });
 });
@@ -90,7 +68,7 @@ const createMember = (memberData) => __awaiter(void 0, void 0, void 0, function*
     return collectionWrite.insertOne(memberData);
 });
 exports.createMember = createMember;
-const getHashedPasswordByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
+const checkEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield collectionRead.findOne({
         "email": email
     }, {
@@ -104,5 +82,13 @@ const getHashedPasswordByEmail = (email) => __awaiter(void 0, void 0, void 0, fu
     });
     return Promise.resolve(user);
 });
-exports.getHashedPasswordByEmail = getHashedPasswordByEmail;
+exports.checkEmail = checkEmail;
+const updatePasswordByUserId = (userId, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionWrite.findOneAndUpdate({ "_id": userId }, {
+        "$set": {
+            "password": hashedPassword
+        }
+    });
+});
+exports.updatePasswordByUserId = updatePasswordByUserId;
 //# sourceMappingURL=auth.js.map

@@ -1,7 +1,8 @@
 import express from "express";
 //import { requestChecker } from '../../app';
 import { Crypt } from "../../services/guard";
-import { signup, getHashedPasswordByEmail } from "../../models/auth";
+import { signup, checkEmail,forgotPassword } from "../../models/auth";
+import { Mailer } from "../../services/mail";
 var randomNumber = require("random-number-csprng");
 
 
@@ -53,7 +54,7 @@ export const _login = async (req: express.Request, res: express.Response) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  const data = await getHashedPasswordByEmail(email);
+  const data = await checkEmail(email);
 
   if (data) {
     const crypt = new Crypt();
@@ -88,45 +89,43 @@ export const _login = async (req: express.Request, res: express.Response) => {
   }
 };
 
-// export const _forgotPassword = async (req: express.Request, res: express.Response) => {
+export const _forgotPassword = async (req: express.Request, res: express.Response) => {
+    
+      return new Promise(async (resolve, reject) => {
+        const crypt = new Crypt();
+        const randomPassword: string = (await (randomNumber(100000, 999999))).toString();
+        const password = await crypt.hash(randomPassword);
   
-//     const preparedFunction = async (rows) => {
+        const update = await forgotPassword(req.body.email, password);
+        if (update['status'] === 'ok') {
+          Mailer.send({
+            to: `${update["msg"]} <${req.body.email}>`, // to: `${update["msg"]} <${req.body.email}>`,
+            subject: "New Password",
+            template: "forgotPassword",
+            text: `Your user name is ${update["msg"]} and password is ${randomPassword}. Please change your pssword after your first login.`,
+            data: {
+              user: update["msg"],
+              newPassword: randomPassword
+            }
+          }).then();
+          //log.resStatus = 200;
+          resolve({
+            "status": "ok",
+            "data": "",
+            "msg": "If e-mail exists, new password will be sent."
+          });
+        }
+        else {
+          //log.resStatus = 200;
+          resolve({
+            "status": "ok",
+            "data": "",
+            "msg": "If e-mail exists, new password will be sent."
+          });
+        }
+      })
+    
   
-//       return new Promise(async (resolve, reject) => {
-//         const crypt = new Crypt();
-//         const randomPassword: string = (await (randomNumber(100000, 999999))).toString();
-//         const password = await crypt.hash(randomPassword);
-  
-//         const update = await forgotPassword(req.body.email, password);
-//         if (update['status'] === 'ok') {
-//           Mailer.send({
-//             to: `${update["msg"]} <${req.body.email}>`, // to: `${update["msg"]} <${req.body.email}>`,
-//             subject: "New Password",
-//             template: "forgotPassword",
-//             text: `Your user name is ${update["msg"]} and password is ${randomPassword}. Please change your pssword after your first login.`,
-//             data: {
-//               user: update["msg"],
-//               newPassword: randomPassword
-//             }
-//           }).then();
-//           log.resStatus = 200;
-//           resolve({
-//             "status": "ok",
-//             "data": "",
-//             "msg": "If e-mail exists, new password will be sent."
-//           });
-//         }
-//         else {
-//           log.resStatus = 200;
-//           resolve({
-//             "status": "ok",
-//             "data": "",
-//             "msg": "If e-mail exists, new password will be sent."
-//           });
-//         }
-//       })
-//     }
-  
-//   }
+  }
 
 // https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all

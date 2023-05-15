@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._login = exports._signup = void 0;
+exports._forgotPassword = exports._login = exports._signup = void 0;
 //import { requestChecker } from '../../app';
 const guard_1 = require("../../services/guard");
 const auth_1 = require("../../models/auth");
-// import { getHashedPassword, updatePassword } from '../../models/users';
+const mail_1 = require("../../services/mail");
 var randomNumber = require("random-number-csprng");
 const _signup = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log("req.body", req.body);
@@ -60,7 +60,7 @@ exports._signup = _signup;
 const _login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const email = req.body.email;
     const password = req.body.password;
-    const data = yield (0, auth_1.getHashedPasswordByEmail)(email);
+    const data = yield (0, auth_1.checkEmail)(email);
     if (data) {
         const crypt = new guard_1.Crypt();
         const comparePassword = yield crypt.compareHashes(password, data.password);
@@ -97,5 +97,40 @@ const _login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._login = _login;
+const _forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
+        const crypt = new guard_1.Crypt();
+        const randomPassword = (yield (randomNumber(100000, 999999))).toString();
+        const password = yield crypt.hash(randomPassword);
+        const update = yield (0, auth_1.forgotPassword)(req.body.email, password);
+        if (update['status'] === 'ok') {
+            mail_1.Mailer.send({
+                to: `${update["msg"]} <${req.body.email}>`,
+                subject: "New Password",
+                template: "forgotPassword",
+                text: `Your user name is ${update["msg"]} and password is ${randomPassword}. Please change your pssword after your first login.`,
+                data: {
+                    user: update["msg"],
+                    newPassword: randomPassword
+                }
+            }).then();
+            //log.resStatus = 200;
+            resolve({
+                "status": "ok",
+                "data": "",
+                "msg": "If e-mail exists, new password will be sent."
+            });
+        }
+        else {
+            //log.resStatus = 200;
+            resolve({
+                "status": "ok",
+                "data": "",
+                "msg": "If e-mail exists, new password will be sent."
+            });
+        }
+    }));
+});
+exports._forgotPassword = _forgotPassword;
 // https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all
 //# sourceMappingURL=post.js.map

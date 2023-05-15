@@ -61,55 +61,30 @@ console.log("emailex",emailExists)
 
 }
 
-// export const forgotPassword = async (email: string, hashedPassword: string): Promise<any> => {
+export const forgotPassword = async (email: string, hashedPassword: string): Promise<any> => {
 
-//   const user = await getUserIdByEmail(email);
+  const user = await checkEmail(email);
 
-//   const result = {
-//     "status": "ok",
-//     "msg": ""
-//   };
+  const result = {
+    "status": "ok",
+    "msg": ""
+  };
 
-//   if (user) {
+  if (user) {
 
-//     updatePasswordByUserId(user._id, hashedPassword).then();
+    updatePasswordByUserId(user._id, hashedPassword).then();
 
-//     result.msg = `${user.surname.toUpperCase()} ${user.name}`;
+    result.msg = `${user.surname.toUpperCase()} ${user.name}`;
 
-//   }
-//   else {
-//     result.status = 'error';
-//     result.msg = "Email doesn\'t exists";
-//   }
+  }
+  else {
+    result.status = 'error';
+    result.msg = "Email doesn\'t exists";
+  }
 
-//   return Promise.resolve(result);
-// }
+  return Promise.resolve(result);
+}
 
-// export const getHashedPasswordByEmail = async (email: string): Promise<any> => {
-//   const user = await getUserHashedPasswordByEmail(email);
-//   if (user) {
-
-//     const company = await getCompanyLoginInfo(user.company_id);
-
-//     return Promise.resolve({
-//       "status": "ok",
-//       "userId": "" + user._id,
-//       "userName": `${user.surname.toUpperCase()} ${user.name}`,
-//       "userLanguage": user.language || "en",
-//       "userRole": user.userRole,
-//       "password": user.password,
-//       "departmentIds": user.department_ids,
-//       "companyId": "" + company._id,
-//       "companyName": company.name,
-//       "companyStatus": company.status,
-//       "companyNextPaymentTryDate": company.nextPaymentTryDate,
-//       "companyLogo": company.logo
-//     })
-//   }
-//   else {
-//     return Promise.resolve(null);
-//   }
-// }
 
 export const memberEmailExists = async (email: string): Promise<any> => {
     return collectionRead.findOne({ "email": email });
@@ -119,7 +94,7 @@ export const createMember = async (memberData: IMEMBER): Promise<any> => {
     return collectionWrite.insertOne(memberData);
 }
 
-export const getHashedPasswordByEmail = async (email: string): Promise<any> => {
+export const checkEmail = async (email: string): Promise<any> => {
   const user = await collectionRead.findOne(
       {
           "email": email
@@ -137,4 +112,15 @@ export const getHashedPasswordByEmail = async (email: string): Promise<any> => {
 
   return Promise.resolve(user);
 
+}
+
+export const updatePasswordByUserId = async (userId: ObjectId, hashedPassword: string): Promise<any> => {
+  return collectionWrite.findOneAndUpdate(
+      { "_id": userId },
+      {
+          "$set": {
+              "password": hashedPassword
+          }
+      }
+  )
 }

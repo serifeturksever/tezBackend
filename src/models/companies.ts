@@ -5,6 +5,7 @@ export interface COMPANY {
     "_id"?: ObjectId;
     "name": string;
     "image": string;
+    //"type": enum ? 
     
 }
 

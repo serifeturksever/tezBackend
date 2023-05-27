@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSkills = void 0;
+exports.filterSkills = exports.getUserSkills = exports.getSkills = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('skills');
 const collectionWrite = app_1.mongodbWrite.collection('skills');
-// export const getSkills = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getSkills = (params) => __awaiter(void 0, void 0, void 0, function* () {
+const getSkills = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({}).toArray();
+});
+exports.getSkills = getSkills;
+const getUserSkills = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "user_id": userId }).toArray();
+});
+exports.getUserSkills = getUserSkills;
+const filterSkills = (params) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id, title, user_id,
     //   image,
     //   about,
@@ -87,5 +92,5 @@ const getSkills = (params) => __awaiter(void 0, void 0, void 0, function* () {
         .toArray();
     return Promise.resolve(value);
 });
-exports.getSkills = getSkills;
+exports.filterSkills = filterSkills;
 //# sourceMappingURL=skills.js.map

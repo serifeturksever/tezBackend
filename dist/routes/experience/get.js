@@ -9,13 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._filter = void 0;
-const users_1 = require("../../models/users");
-// What types of POST should be included ?
-const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
-    let dummy_user = req.body;
-    let data = yield (0, users_1.filterUsers)(dummy_user);
+exports._get = void 0;
+const experiences_1 = require("../../models/experiences");
+// Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
+const _get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = yield (0, experiences_1.getExperiences)();
     if (data) {
         res.send(data);
     }
@@ -23,5 +21,5 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("data yok");
     }
 });
-exports._filter = _filter;
-//# sourceMappingURL=post.js.map
+exports._get = _get;
+//# sourceMappingURL=get.js.map

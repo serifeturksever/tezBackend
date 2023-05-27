@@ -10,12 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._filter = void 0;
-const users_1 = require("../../models/users");
+const experiences_1 = require("../../models/experiences");
 // What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
     let dummy_user = req.body;
-    let data = yield (0, users_1.filterUsers)(dummy_user);
+    let data = yield (0, experiences_1.filterExperiences)(dummy_user);
     if (data) {
         res.send(data);
     }

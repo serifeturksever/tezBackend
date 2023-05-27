@@ -9,14 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEducations = void 0;
+exports.filterEducations = exports.getUserEducations = exports.getEducations = void 0;
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('educations');
 const collectionWrite = app_1.mongodbWrite.collection('educations');
-// export const getEducations = async (): Promise<any> => {
-//     return collectionRead.find({}).toArray()
-// }
-const getEducations = (params) => __awaiter(void 0, void 0, void 0, function* () {
+const getEducations = () => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find().toArray();
+});
+exports.getEducations = getEducations;
+const getUserEducations = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "user_id": userId }).toArray();
+});
+exports.getUserEducations = getUserEducations;
+const filterEducations = (params) => __awaiter(void 0, void 0, void 0, function* () {
     const { _id, title, 
     //user_id,
     company_id, employment_id, location, min_date, max_date,
@@ -97,5 +102,5 @@ const getEducations = (params) => __awaiter(void 0, void 0, void 0, function* ()
         .toArray();
     return Promise.resolve(value);
 });
-exports.getEducations = getEducations;
+exports.filterEducations = filterEducations;
 //# sourceMappingURL=educations.js.map

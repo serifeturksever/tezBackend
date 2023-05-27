@@ -14,6 +14,8 @@ const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('users');
 const collectionWrite = app_1.mongodbWrite.collection('users');
 // TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
+// FIXME: userId parametre olarak objectId mi alsın ?
+// Company içerisinde userId yok ?
 const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });

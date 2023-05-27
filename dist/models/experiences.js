@@ -9,25 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterLanguages = exports.getUserLanguages = exports.getLanguages = void 0;
+exports.filterExperiences = exports.getUserExperiences = exports.getExperiences = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('languages');
-const collectionWrite = app_1.mongodbWrite.collection('languages');
-const getLanguages = () => __awaiter(void 0, void 0, void 0, function* () {
+// FIXME: Burada company_id alındı company_name yerine. Ya ikisi eklenecek ya da company_name company_id ile alınacak
+const collectionRead = app_1.mongodbRead.collection('experiences');
+const collectionWrite = app_1.mongodbWrite.collection('experiences');
+const getExperiences = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
-exports.getLanguages = getLanguages;
-const getUserLanguages = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getExperiences = getExperiences;
+const getUserExperiences = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "user_id": userId }).toArray();
 });
-exports.getUserLanguages = getUserLanguages;
-const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id, title, user_id, level,
-    //   image,
-    //   about,
-    //   connection_count,
-    //   location
-     } = params;
+exports.getUserExperiences = getUserExperiences;
+const filterExperiences = (params) => __awaiter(void 0, void 0, void 0, function* () {
+    const { name, 
+    // company_id,
+    //   establishment,
+    location } = params;
     // let { dataCount } = params;
     // let { startData } = params;
     // if (!dataCount) {
@@ -36,31 +35,31 @@ const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* 
     // else if (dataCount > 10000) {
     //   dataCount = 10000;
     // }
-    let filter = {
-        "_id": _id, //? bak buraya
-    };
-    if (title) {
-        filter["title"] = { $regex: new RegExp(`${title}`, "i") };
+    let filter = {}; // "company_id":company_id,
+    if (name) {
+        filter["name"] = { $regex: new RegExp(`${name}`, "i") };
     }
-    // if (departmentName) {
-    //   try {
-    //     const checkDeparmentsName = await getDepartmentsByLikeName(company_id, departmentName);
-    //     if (checkDeparmentsName.length > 0) {
-    //       const deptIds = checkDeparmentsName.map(function (d: any) { return d._id; });
-    //       filter["department_ids"] = { "$in": deptIds };
-    //     } else {
-    //       filter["department_ids"] = { "$in": [] };
+    if (location) {
+        filter["location"] = { $regex: new RegExp(`${location}`, "i") };
+    }
+    // ! datelere gore filter yapılacak.
+    //   let and: any = []
+    //   if (min_date && max_date) {
+    //     and.push(
+    //         {"start_date": {$gte: min_date}},
+    //         {"end_date": {$lte: max_date}},
+    //     )
+    // }
+    // else if (min_date && !max_date) {
+    //     filter["createdAt"] = {
+    //         $gte: min_date
     //     }
-    //   }
-    //   catch (e) {
-    //     console.log("Department name error", e)
-    //     filter["department_ids"] = { "$in": [] };
-    //   }
     // }
-    // if (crmId) {
-    //   filter["crmId"] = { $regex: new RegExp(`${crmId}`, "i") };
+    // else if (!min_date && max_date) {
+    //     filter["createdAt"] = {
+    //         $lte: max_date
+    //     }
     // }
-    //
     let value = yield collectionRead.aggregate([
         {
             $facet: {
@@ -70,11 +69,12 @@ const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* 
                     },
                     {
                         "$project": {
-                            "_id": 0,
-                            "id": "$_id",
-                            "title": 1,
-                            "user_id": 1,
-                            "level": 1,
+                            "_id": 1,
+                            "name": "$_id",
+                            "company_id": 1,
+                            "establishment": 1,
+                            "location": 1,
+                            "date": 1
                         }
                     },
                     // { $skip: startData ? startData : 0 },
@@ -93,5 +93,5 @@ const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* 
         .toArray();
     return Promise.resolve(value);
 });
-exports.filterLanguages = filterLanguages;
-//# sourceMappingURL=languages.js.map
+exports.filterExperiences = filterExperiences;
+//# sourceMappingURL=experiences.js.map

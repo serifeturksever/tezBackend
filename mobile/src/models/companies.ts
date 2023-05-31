@@ -8,8 +8,8 @@ export interface COMPANY {
     
 }
 
-const collectionRead = mongodbRead.collection('companies');
-const collectionWrite = mongodbWrite.collection('companies');
+const collectionRead = mongodbRead.collection('m_companies');
+const collectionWrite = mongodbWrite.collection('m_companies');
 
 export const getCompanies = async (): Promise<any> => {
     return collectionRead.find().toArray()

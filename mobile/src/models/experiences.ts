@@ -14,8 +14,8 @@ export interface EDUCATION {
 
 // FIXME: Burada company_id alındı company_name yerine. Ya ikisi eklenecek ya da company_name company_id ile alınacak
 
-const collectionRead = mongodbRead.collection('experiences');
-const collectionWrite = mongodbWrite.collection('experiences');
+const collectionRead = mongodbRead.collection('m_experiences');
+const collectionWrite = mongodbWrite.collection('m_experiences');
 
 export const getExperiences = async (): Promise<any> => {
     return collectionRead.find().toArray()

@@ -1,5 +1,6 @@
 import express from 'express';
-import { filterExperiences } from '../../models/experiences';
+import { filterExperiences, getUserExperiences } from '../../models/experiences';
+import { ObjectId } from 'mongodb';
 
 // What types of POST should be included ?
 
@@ -9,3 +10,8 @@ export const _filter = async (req,res) => {
     let data = await filterExperiences(dummy_user)
     if(data){res.send(data)} else {console.log("data yok")}
  }
+
+ export const _getUserExperiences = async(req,res) => {
+    let data = await getUserExperiences(new ObjectId(req.body.user_id))
+    if(data){res.send(data)} else {console.log("data yok")}
+}

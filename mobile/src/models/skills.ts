@@ -8,8 +8,8 @@ export interface SKILL {
     
 }
 
-const collectionRead = mongodbRead.collection('skills');
-const collectionWrite = mongodbWrite.collection('skills');
+const collectionRead = mongodbRead.collection('m_skills');
+const collectionWrite = mongodbWrite.collection('m_skills');
 
 export const getSkills = async (): Promise<any> => {
     return collectionRead.find({}).toArray()

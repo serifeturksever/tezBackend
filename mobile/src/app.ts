@@ -24,6 +24,11 @@ import { router as userRouter } from './routes/user/routes';
 import { router as favouriteRouter } from './routes/favourite/routes';
 import { router as authRouter } from './routes/auth/routes';
 import { router as skillRouter } from './routes/skill/routes';
+import { router as experienceRouter } from './routes/experience/routes';
+import { router as educationRouter } from './routes/education/routes';
+import { router as courseRouter } from './routes/course/routes';
+import { router as languageRouter } from './routes/language/routes';
+
 
 
 export const app = express();
@@ -39,6 +44,10 @@ app
   .use('/favourite', favouriteRouter)
   .use('/auth', authRouter)
   .use('/skill', skillRouter)
+  .use('/experience', experienceRouter)
+  .use('/education', educationRouter)
+  .use('/course', courseRouter)
+  .use('/language', languageRouter)
 
 app.get('/', (req, res) => {
   res.send('hii');

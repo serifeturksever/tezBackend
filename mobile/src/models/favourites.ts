@@ -7,8 +7,8 @@ export interface FAVOURITE {
   "fav_id"?: ObjectId;
 }
 
-const collectionRead = mongodbRead.collection("favourites");
-const collectionWrite = mongodbWrite.collection("favourites");
+const collectionRead = mongodbRead.collection("m_favourites");
+const collectionWrite = mongodbWrite.collection("m_favourites");
 
 export const getUserFavs = async (userId: ObjectId): Promise<any> => {
   return collectionRead.find({"user_id": userId}).toArray()

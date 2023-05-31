@@ -9,14 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePasswordByUserId = exports.checkEmail = exports.createMember = exports.memberEmailExists = exports.forgotPassword = exports.signup = void 0;
+exports.getUserById = exports.updatePassword = exports.getHashedPassword = exports.updatePasswordByUserId = exports.checkEmail = exports.createMember = exports.memberEmailExists = exports.forgotPassword = exports.signup = void 0;
+const mongodb_1 = require("mongodb");
 const app_1 = require("../app");
 const collectionRead = app_1.mongodbRead.collection('members');
 const collectionWrite = app_1.mongodbWrite.collection('members');
 const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
-    // const emailRegex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9_\-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\.[a-zA-Z]+$', 'gm');
-    // if (emailRegex.test(signupInfo.email)) {
-    // }
+    const emailRegex = new RegExp('^[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9_\-]@[a-zA-Z0-9][a-zA-Z0-9._-]*[a-zA-Z0-9]\.[a-zA-Z]+$', 'gm');
+    if (emailRegex.test(signupInfo.email)) {
+    }
     const emailExists = yield (0, exports.memberEmailExists)(signupInfo.email);
     console.log("emailex", emailExists);
     if (emailExists == null) {
@@ -91,4 +92,44 @@ const updatePasswordByUserId = (userId, hashedPassword) => __awaiter(void 0, voi
     });
 });
 exports.updatePasswordByUserId = updatePasswordByUserId;
+const getHashedPassword = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield collectionRead.findOne({
+        "_id": new mongodb_1.ObjectId(userId),
+        // "company_id": new ObjectId(companyId)
+    }, {
+        "projection": {
+            "_id": 0,
+            "password": 1
+        }
+    });
+    const password = user ? user.password : "";
+    return Promise.resolve(password);
+});
+exports.getHashedPassword = getHashedPassword;
+const updatePassword = (userId, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = {
+        "status": "error",
+        "msg": ""
+    };
+    const checkUser = yield (0, exports.getUserById)(new mongodb_1.ObjectId(userId));
+    if (!checkUser) {
+        result.status = "User does not exist";
+    }
+    else {
+        collectionWrite.findOneAndUpdate({ "_id": new mongodb_1.ObjectId(userId) }, {
+            "$set": {
+                "password": hashedPassword,
+                'updatedAt': new Date().getTime()
+            }
+        }).then();
+        result.status = "ok";
+    }
+    return Promise.resolve(result);
+});
+exports.updatePassword = updatePassword;
+const getUserById = (userId, companyId = null) => __awaiter(void 0, void 0, void 0, function* () {
+    let a = yield collectionRead.findOne({ "_id": userId });
+    return Promise.resolve(a);
+});
+exports.getUserById = getUserById;
 //# sourceMappingURL=auth.js.map

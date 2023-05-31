@@ -11,5 +11,6 @@ exports.router
     //.get('/', _get)
     .post('/signup', post_1._signup)
     .post('/login', post_1._login)
-    .post('/forgotPassword', post_1._forgotPassword);
+    .post('/forgotPassword', post_1._forgotPassword)
+    .post('/updatePassword', post_1._updatePassword);
 //# sourceMappingURL=routes.js.map

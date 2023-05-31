@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._forgotPassword = exports._login = exports._signup = void 0;
-//import { requestChecker } from '../../app';
+exports._updatePassword = exports._forgotPassword = exports._login = exports._signup = void 0;
+const app_1 = require("../../app");
 const guard_1 = require("../../services/guard");
 const auth_1 = require("../../models/auth");
 const mail_1 = require("../../services/mail");
@@ -97,13 +97,31 @@ const _login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._login = _login;
+const Login = (res, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const payload = {
+        "userId": data["userId"],
+        "userLanguage": data["userLanguage"],
+        "userRole": data["userRole"],
+        "userName": data["userName"],
+        "companyId": data["companyId"],
+        // "companyName": data["_companyName"],
+        // "companyLogo": data["_companyLogo"]
+    };
+    res.locals.guard.payload = payload;
+    let guardData = res.locals.guard;
+    const values = yield Promise.all([
+        app_1.requestChecker.saveTokenToMemoryWithPayload(guardData, res),
+        app_1.requestChecker.saveCompanyToMemory(new ObjectId(data["companyId"]))
+    ]);
+    return values[0];
+});
 const _forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     return new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
         const crypt = new guard_1.Crypt();
-        const randomPassword = (yield (randomNumber(100000, 999999))).toString();
+        const randomPassword = (yield randomNumber(100000, 999999)).toString();
         const password = yield crypt.hash(randomPassword);
         const update = yield (0, auth_1.forgotPassword)(req.body.email, password);
-        if (update['status'] === 'ok') {
+        if (update["status"] === "ok") {
             mail_1.Mailer.send({
                 to: `${update["msg"]} <${req.body.email}>`,
                 subject: "New Password",
@@ -111,26 +129,72 @@ const _forgotPassword = (req, res) => __awaiter(void 0, void 0, void 0, function
                 text: `Your user name is ${update["msg"]} and password is ${randomPassword}. Please change your pssword after your first login.`,
                 data: {
                     user: update["msg"],
-                    newPassword: randomPassword
-                }
+                    newPassword: randomPassword,
+                },
             }).then();
             //log.resStatus = 200;
             resolve({
-                "status": "ok",
-                "data": "",
-                "msg": "If e-mail exists, new password will be sent."
+                status: "ok",
+                data: "",
+                msg: "If e-mail exists, new password will be sent.",
             });
         }
         else {
             //log.resStatus = 200;
             resolve({
-                "status": "ok",
-                "data": "",
-                "msg": "If e-mail exists, new password will be sent."
+                status: "ok",
+                data: "",
+                msg: "If e-mail exists, new password will be sent.",
             });
         }
     }));
 });
 exports._forgotPassword = _forgotPassword;
+const _updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const crypt = new guard_1.Crypt();
+    let [password, newPassword, newPasswordAgain] = [
+        req.body.password,
+        req.body.newPassword,
+        req.body.newPasswordAgain,
+    ];
+    if (newPassword != newPasswordAgain) {
+        res.send({
+            status: "error",
+            msg: "New Password and Confirm New Password is not equal.",
+            resStatus: 400,
+        });
+    }
+    else {
+        const oldHashedPassword = yield (0, auth_1.getHashedPassword)(res.locals.guard.payload.userId);
+        const comparePassword = yield crypt.compareHashes(password, oldHashedPassword);
+        if (!comparePassword) {
+            res.send({
+                status: "error",
+                msg: "Invalid old password",
+                resStatus: 400,
+            });
+        }
+        else {
+            const hashedPassword = yield crypt.hash(newPassword);
+            const row = yield (0, auth_1.updatePassword)(res.locals.guard.payload.userId, hashedPassword);
+            if (row["status"] == "ok") {
+                //log.resStatus = 200;
+                res.send({
+                    status: "ok",
+                    msg: "Password change is successful.",
+                    data: " ",
+                });
+            }
+            else {
+                res.send({
+                    status: "error",
+                    msg: row["msg"],
+                    resStatus: 400,
+                });
+            }
+        }
+    }
+});
+exports._updatePassword = _updatePassword;
 // https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all
 //# sourceMappingURL=post.js.map

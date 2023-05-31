@@ -10,8 +10,8 @@ export interface USER {
     "location"?: string;
 }
 
-const collectionRead = mongodbRead.collection('users');
-const collectionWrite = mongodbWrite.collection('users');
+const collectionRead = mongodbRead.collection('m_users');
+const collectionWrite = mongodbWrite.collection('m_users');
 
 // TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
 // FIXME: userId parametre olarak objectId mi alsın ?

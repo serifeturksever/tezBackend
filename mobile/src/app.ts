@@ -23,6 +23,8 @@ import { getUsers } from './models/users';
 import { router as userRouter } from './routes/user/routes';
 import { router as favouriteRouter } from './routes/favourite/routes';
 import { router as authRouter } from './routes/auth/routes';
+import { router as skillRouter } from './routes/skill/routes';
+
 
 export const app = express();
 const http = require("http");
@@ -36,6 +38,7 @@ app
   .use('/user', userRouter)
   .use('/favourite', favouriteRouter)
   .use('/auth', authRouter)
+  .use('/skill', skillRouter)
 
 app.get('/', (req, res) => {
   res.send('hii');

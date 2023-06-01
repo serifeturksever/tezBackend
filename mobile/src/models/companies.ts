@@ -5,14 +5,15 @@ export interface COMPANY {
     "_id"?: ObjectId;
     "name": string;
     "image": string;
-    
+    "type": string;
+    "isBookmarked": Boolean;
 }
 
 const collectionRead = mongodbRead.collection('m_companies');
 const collectionWrite = mongodbWrite.collection('m_companies');
 
 export const getCompanies = async (): Promise<any> => {
-    return collectionRead.find().toArray()
+    return collectionRead.find({"type": "Company"}).toArray()
 }
 
 export const getUserCompanies = async (userId: ObjectId): Promise<any> => {

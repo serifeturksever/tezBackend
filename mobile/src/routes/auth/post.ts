@@ -58,7 +58,7 @@ export const _login = async (req: express.Request, res: express.Response) => {
   if (data) {
     const crypt = new Crypt();
     const comparePassword = await crypt.compareHashes(password, data.password);
-    if (comparePassword) {
+    if (comparePassword) {  
       try {
         // res.locals.guard = guardData;
         res.send({

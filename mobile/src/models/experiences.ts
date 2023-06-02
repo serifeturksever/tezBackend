@@ -107,3 +107,31 @@ export const filterExperiences = async (params: EDUCATION): Promise<any> => {
   
     return Promise.resolve(value);
   }
+
+  export const getCompanyUsers = async (company_id: ObjectId): Promise<any> => {
+    let data = await collectionRead.aggregate(
+      [
+        {
+          '$match': {
+            'company_id': company_id
+          }
+        }, {
+          '$group': {
+            '_id': '$company_id', 
+            'users': {
+              '$push': '$user_id'
+            }
+          }
+        }, {
+          '$project': {
+            '_id': 0
+          }
+        }
+      ]
+    ).toArray();
+
+    let result = data[0] ? data[0]["users"] : []
+    return Promise.resolve(result) 
+}
+
+

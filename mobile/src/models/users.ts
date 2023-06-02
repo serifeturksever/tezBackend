@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { mongodbRead, mongodbWrite } from '../app';
+import { getCompanyUsers } from './experiences';
 
 export interface USER {
     "_id"?: ObjectId;
@@ -91,3 +92,20 @@ export const filterUsers = async (params: USER): Promise<any> => {
     return Promise.resolve(value[0].data);
   }
 
+  
+
+  export const getUserWithId = async (user_id: ObjectId): Promise<any> => {
+    return collectionRead.find({"_id": user_id}).toArray()
+  }
+
+  export const getCompanyUsersAsUserObj = async (company_id: ObjectId): Promise<any> => {
+    let users = []
+    let companyUsers = await getCompanyUsers(company_id);
+    for(let i=0;i<companyUsers.length;i++) {
+      let user = await getUserWithId(companyUsers[i]);
+      if(user[0]){
+        users.push(user[0])
+      }
+    }
+    return Promise.resolve(users);
+  }

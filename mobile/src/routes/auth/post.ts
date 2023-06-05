@@ -54,7 +54,7 @@ export const _login = async (req: express.Request, res: express.Response) => {
   const password = req.body.password;
 
   const data = await checkEmail(email);
-
+  console.log(data)
   if (data) {
     const crypt = new Crypt();
     const comparePassword = await crypt.compareHashes(password, data.password);
@@ -64,11 +64,20 @@ export const _login = async (req: express.Request, res: express.Response) => {
         res.send({
           status: "ok",
           msg: "success",
+          _id: data._id,
+          name: data.name,
+          surname: data.surname,
+          username: data.username
         });
       } catch (ex) {
         res.send({
           status: "error",
           msg: "Invalid login info",
+          _id: "",
+          name: "",
+          surname: "",
+          userName: "",
+          password: ""
         });
       }
     } else {

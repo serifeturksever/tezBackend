@@ -104,3 +104,32 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
   
     return Promise.resolve(value);
   }
+
+  
+  export const getFilteredSkills = async (skills: string): Promise<any> => {
+
+    let skillsObjArr = []
+    skills.split(",").map(skill => {
+      let obj = {
+        "title": skill
+      }
+      skillsObjArr.push(obj)
+    })
+
+    return collectionRead.aggregate(
+      [
+        {
+            '$match': {
+                '$or': skillsObjArr
+            }
+        }, {
+            '$group': {
+                '_id': '$user_id', 
+                'title': {
+                    '$push': '$title'
+                }
+            }
+        }
+    ]
+    ).toArray();
+  }

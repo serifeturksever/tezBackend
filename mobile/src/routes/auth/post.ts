@@ -54,7 +54,6 @@ export const _login = async (req: express.Request, res: express.Response) => {
   const password = req.body.password;
 
   const data = await checkEmail(email);
-  console.log(data)
   if (data) {
     const crypt = new Crypt();
     const comparePassword = await crypt.compareHashes(password, data.password);

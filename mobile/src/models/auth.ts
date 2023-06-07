@@ -29,10 +29,7 @@ export const signup = async (signupInfo: ISIGNUP) => {
   }
 
   const emailExists = await memberEmailExists(signupInfo.email);
-console.log("emailex",emailExists)
   if (emailExists == null) {
-
-
     const memberData: IMEMBER = {
       "name": signupInfo.name,
       "surname": signupInfo.surname,
@@ -44,7 +41,7 @@ console.log("emailex",emailExists)
 
     const member = await createMember(memberData);
 
-    console.log("member",member)
+    // console.log("member",member)
    
     return {
       "status": "ok",

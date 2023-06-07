@@ -135,3 +135,34 @@ export const filterExperiences = async (params: EDUCATION): Promise<any> => {
 }
 
 
+export const getFilteredExperiences = async (experiences: string): Promise<any> => {
+  let result = [];
+  let experiencesObjArr = []
+  if(experiences.length > 0){
+    experiences.split(",").map(experience => {
+      let obj = {
+        "name": experience
+      }
+      experiencesObjArr.push(obj)
+    })
+    result = await collectionRead.aggregate(
+      [
+        {
+            '$match': {
+                '$or': experiencesObjArr
+            }
+        }, {
+            '$group': {
+                '_id': '$user_id', 
+                'title': {
+                    '$push': '$name'
+                }
+            }
+        }
+    ]
+    ).toArray();
+  }
+
+    return Promise.resolve(result)
+  
+}

@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { mongodbRead, mongodbWrite } from '../app';
-import { getCompanyUsers } from './experiences';
+import { filterExperiences, getCompanyUsers, getFilteredExperiences } from './experiences';
+import { filterLanguages, getFilteredLanguages } from './languages';
+import { filterSkills, getFilteredSkills } from './skills';
 
 export interface USER {
     "_id"?: ObjectId;
@@ -52,8 +54,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
       }
   
-   console.log("filter",filter)
-
     let value = await collectionRead.aggregate([
       {
         $facet: {
@@ -108,4 +108,16 @@ export const filterUsers = async (params: USER): Promise<any> => {
       }
     }
     return Promise.resolve(users);
+  }
+
+  export const getFilteredUsers = async (filterObj: Object): Promise<any> => {
+
+    const filteredSkills = filterObj["skills"].length > 0 ? getFilteredSkills(filterObj["skills"]) : []
+    const filteredExperiences = filterObj["experiences"].length > 0 ? getFilteredExperiences(filterObj["experiences"]) : []
+    const filteredLanguages = filterObj["languages"].length > 0 ? getFilteredLanguages(filterObj["languages"]) : []
+
+    console.log(filteredSkills)
+    console.log(filteredExperiences)
+    console.log(filteredLanguages)
+
   }

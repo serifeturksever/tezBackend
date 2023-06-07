@@ -29,6 +29,8 @@ import { router as educationRouter } from './routes/education/routes';
 import { router as courseRouter } from './routes/course/routes';
 import { router as languageRouter } from './routes/language/routes';
 import { router as companyRouter } from './routes/company/routes';
+import { router as memberRouter } from './routes/member/routes';
+
 
 
 
@@ -50,6 +52,7 @@ app
   .use('/course', courseRouter)
   .use('/language', languageRouter)
   .use('/company', companyRouter)
+  .use('/member', memberRouter)
 
 app.get('/', (req, res) => {
   res.send('hii');

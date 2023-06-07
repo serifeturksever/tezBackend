@@ -2,8 +2,7 @@ import { ObjectId } from 'mongodb';
 import { mongodbRead, mongodbWrite } from '../app';
 
 export interface ISIGNUP {
-  "name": string;
-  "surname": string;
+  "fullname": string;
   "username": string;
   "hashedPassword": string;
   "email": string;
@@ -11,8 +10,7 @@ export interface ISIGNUP {
 
 export interface IMEMBER {
     "_id"?: ObjectId;
-    "name": string;
-    "surname": string;
+    "fullname": string;
     "username": string;
     "email": string;
     "password": string;
@@ -29,13 +27,11 @@ export const signup = async (signupInfo: ISIGNUP) => {
   }
 
   const emailExists = await memberEmailExists(signupInfo.email);
-console.log("emailex",emailExists)
   if (emailExists == null) {
 
 
     const memberData: IMEMBER = {
-      "name": signupInfo.name,
-      "surname": signupInfo.surname,
+      "fullname": signupInfo.fullname,
       "username": signupInfo.username,
       "email": signupInfo.email,
       "password": signupInfo.hashedPassword,
@@ -43,8 +39,6 @@ console.log("emailex",emailExists)
     }
 
     const member = await createMember(memberData);
-
-    console.log("member",member)
    
     return {
       "status": "ok",
@@ -74,7 +68,7 @@ export const forgotPassword = async (email: string, hashedPassword: string): Pro
 
     updatePasswordByUserId(user._id, hashedPassword).then();
 
-    result.msg = `${user.surname.toUpperCase()} ${user.name}`;
+    result.msg = `${user.fullname}`;
 
   }
   else {
@@ -103,8 +97,7 @@ export const checkEmail = async (email: string): Promise<any> => {
           "projection": {
               "_id": 1,
               "password": 1,
-              "name": 1,
-              "surname": 1,
+              "fullname": 1,
               "username": 1,
           }
       }

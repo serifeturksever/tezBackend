@@ -8,9 +8,8 @@ var randomNumber = require("random-number-csprng");
 export const _signup = async (req: express.Request, res: express.Response) => {
   console.log("req.body", req.body);
   const crypt = new Crypt();
-  let [name, surname, username, email, password, repassword] = [
-    req.body.name,
-    req.body.surname,
+  let [fullname, username, email, password, repassword] = [
+    req.body.fullname,
     req.body.username,
     req.body.email,
     req.body.password,
@@ -28,8 +27,7 @@ export const _signup = async (req: express.Request, res: express.Response) => {
   }
 
   const register = await signup({
-    name,
-    surname,
+    fullname,
     username,
     hashedPassword,
     email,
@@ -65,8 +63,7 @@ export const _login = async (req: express.Request, res: express.Response) => {
           status: "ok",
           msg: "success",
           _id: data._id,
-          name: data.name,
-          surname: data.surname,
+          fullname: data.fullname,
           username: data.username
         });
       } catch (ex) {
@@ -74,10 +71,8 @@ export const _login = async (req: express.Request, res: express.Response) => {
           status: "error",
           msg: "Invalid login info",
           _id: "",
-          name: "",
-          surname: "",
-          userName: "",
-          password: ""
+          fullname: "",
+          userName: ""
         });
       }
     } else {

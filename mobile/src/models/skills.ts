@@ -104,3 +104,36 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
   
     return Promise.resolve(value);
   }
+
+  export const getFilteredSkills = async (skills: string): Promise<any> => {
+    console.log("merhaba ben skills")
+    let filter = {}
+    let skillsObjArr = []
+    skills.split(",").map(skill => {
+      let obj = {
+        "title": skill
+      }
+      skillsObjArr.push(obj)
+    })
+
+    if(skillsObjArr.length > 1){
+      filter["$or"] = skillsObjArr
+    } else {
+      filter = skillsObjArr[0]
+    }
+
+    return collectionRead.aggregate(
+      [
+        {
+            '$match': filter
+        }, {
+            '$group': {
+                '_id': '$user_id', 
+                'title': {
+                    '$push': '$title'
+                }
+            }
+        }
+    ]
+    ).toArray();
+  }

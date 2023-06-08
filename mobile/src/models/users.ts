@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { mongodbRead, mongodbWrite } from '../app';
-import { getCompanyUsers } from './experiences';
+import { getCompanyUsers, getFilteredExperiences } from './experiences';
+import { getFilteredSkills } from './skills';
+import { getFilteredLanguages } from './languages';
 
 export interface USER {
     "_id"?: ObjectId;
@@ -108,4 +110,62 @@ export const filterUsers = async (params: USER): Promise<any> => {
       }
     }
     return Promise.resolve(users);
+  }
+
+  export const getFilteredUsers = async (filterObj: Object): Promise<any> => { // verimli hale getirilecek
+
+    let queryCount = Object.values(filterObj).filter(key => key != "").length;
+
+    const filteredSkills = filterObj["skills"] != "" ? await getFilteredSkills(filterObj["skills"]) : []
+    const filteredExperiences = filterObj["experiences"] != "" ? await getFilteredExperiences(filterObj["experiences"]) : []
+    const filteredLanguages = filterObj["languages"] != "" ? await getFilteredLanguages(filterObj["languages"]) : []
+
+    let mainSkillsArr = []
+    let mainExperiencesArr = []
+    let mainLanguagesArr = []
+
+    if(filterObj["skills"] != "" && filteredSkills.length > 0){
+    filteredSkills.map(skill => {
+      if(skill["title"].length == filterObj["skills"].split(",").length){
+        mainSkillsArr.push(skill["_id"].toString())
+      }
+    })
+  }
+
+    if(filterObj["experiences"] != "" && filteredExperiences.length > 0){
+      filteredExperiences.map(experience => {
+        if(experience["name"].length == filterObj["experiences"].split(",").length){
+          mainExperiencesArr.push(experience["_id"].toString())
+        }
+      })
+    }
+    
+    if(filterObj["languages"] != "" && filteredLanguages.length > 0){
+      filteredLanguages.map(language => {
+        if(language["title"].length == filterObj["languages"].split(",").length){
+          mainLanguagesArr.push(language["_id"].toString())
+        }
+      })
+    }
+
+    let mergedAbilitiesArr = [...mainSkillsArr,...mainExperiencesArr,...mainLanguagesArr]
+
+    let uniqueUserIds = [...new Set(mergedAbilitiesArr)];
+    const elementCounts = uniqueUserIds.map(value => [value, mergedAbilitiesArr.filter(str => str === value).length]);
+    let resultObj = elementCounts.filter(element => element[1] == queryCount)
+    let result = resultObj.map(key => key[0])
+
+    if(result.length == 0){
+      return []
+    }
+
+    let users = []
+    for(let i=0;i<result.length;i++){
+      let user = await getUserWithId(new ObjectId(result[i]));
+      if(user[0]){
+        users.push(user[0])
+      }
+    }
+    console.log("users",users)
+    return Promise.resolve(users)
   }

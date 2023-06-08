@@ -7,5 +7,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  return console.log(`Mail server started on port 3002${port}`);
+  return console.log(`Mail server started on port ${port}`);
 });

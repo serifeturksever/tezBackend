@@ -3,6 +3,7 @@ import { mongodbRead, mongodbWrite } from '../app';
 import { getCompanyUsers, getFilteredExperiences } from './experiences';
 import { getFilteredSkills } from './skills';
 import { getFilteredLanguages } from './languages';
+import { AnyArray } from 'mongoose';
 
 export interface USER {
     "_id"?: ObjectId;
@@ -114,39 +115,24 @@ export const filterUsers = async (params: USER): Promise<any> => {
 
   export const getFilteredUsers = async (filterObj: Object): Promise<any> => { // verimli hale getirilecek
 
+    // bu kodun eski hali signalde 08 haziran 2023 11.15
+    // burhandundar2399 mailinde
+
     let queryCount = Object.values(filterObj).filter(key => key != "").length;
 
     const filteredSkills = filterObj["skills"] != "" ? await getFilteredSkills(filterObj["skills"]) : []
     const filteredExperiences = filterObj["experiences"] != "" ? await getFilteredExperiences(filterObj["experiences"]) : []
     const filteredLanguages = filterObj["languages"] != "" ? await getFilteredLanguages(filterObj["languages"]) : []
 
-    let mainSkillsArr = []
-    let mainExperiencesArr = []
-    let mainLanguagesArr = []
+    const responses =  await Promise.all([
+      getAbilityUserId(filterObj, "skills",filteredSkills),
+      getAbilityUserId(filterObj, "experiences", filteredExperiences),
+      getAbilityUserId(filterObj, "languages", filteredLanguages)
+    ])
 
-    if(filterObj["skills"] != "" && filteredSkills.length > 0){
-    filteredSkills.map(skill => {
-      if(skill["title"].length == filterObj["skills"].split(",").length){
-        mainSkillsArr.push(skill["_id"].toString())
-      }
-    })
-  }
-
-    if(filterObj["experiences"] != "" && filteredExperiences.length > 0){
-      filteredExperiences.map(experience => {
-        if(experience["name"].length == filterObj["experiences"].split(",").length){
-          mainExperiencesArr.push(experience["_id"].toString())
-        }
-      })
-    }
-    
-    if(filterObj["languages"] != "" && filteredLanguages.length > 0){
-      filteredLanguages.map(language => {
-        if(language["title"].length == filterObj["languages"].split(",").length){
-          mainLanguagesArr.push(language["_id"].toString())
-        }
-      })
-    }
+    let mainSkillsArr = responses[0]
+    let mainExperiencesArr = responses[1]
+    let mainLanguagesArr = responses[2]
 
     let mergedAbilitiesArr = [...mainSkillsArr,...mainExperiencesArr,...mainLanguagesArr]
 
@@ -168,4 +154,18 @@ export const filterUsers = async (params: USER): Promise<any> => {
     }
     console.log("users",users)
     return Promise.resolve(users)
+  }
+
+  export const getAbilityUserId = async (abilityObject: Object, abilityString: string, filteredArray: Array<any>): Promise<any> => {
+    let mongoEntity = abilityString == "experiences" ? "name" : "title"
+    let mainAbilityArr = []
+    if(abilityObject[abilityString] != "" && filteredArray.length > 0){
+      filteredArray.map(ability => {
+        if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
+          mainAbilityArr.push(ability["_id"].toString())
+        }
+      })
+    }
+
+    return mainAbilityArr;
   }

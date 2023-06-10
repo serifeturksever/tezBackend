@@ -12,6 +12,7 @@ export interface USER {
     "about"?: string;
     "connection_count"?: string; 
     "location"?: string;
+    "isBookmarked"?: Boolean;
 }
 
 const collectionRead = mongodbRead.collection('m_users');
@@ -23,6 +24,19 @@ const collectionWrite = mongodbWrite.collection('m_users');
 
 export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
+}
+
+export const updateUserBookmark = async (user: USER): Promise<any> => {
+  return collectionRead.updateOne(
+    {
+    "_id": user._id
+    },
+    {
+      "$set": {
+        "isBookmarked": user.isBookmarked
+      }
+    }
+    );
 }
 
 export const filterUsers = async (params: USER): Promise<any> => {
@@ -98,7 +112,7 @@ export const filterUsers = async (params: USER): Promise<any> => {
   
 
   export const getUserWithId = async (user_id: ObjectId): Promise<any> => {
-    return collectionRead.find({"_id": user_id}).toArray()
+    return collectionRead.findOne({"_id": user_id});
   }
 
   export const getCompanyUsersAsUserObj = async (company_id: ObjectId): Promise<any> => {
@@ -106,9 +120,7 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let companyUsers = await getCompanyUsers(company_id);
     for(let i=0;i<companyUsers.length;i++) {
       let user = await getUserWithId(companyUsers[i]);
-      if(user[0]){
-        users.push(user[0])
-      }
+      users.push(user)
     }
     return Promise.resolve(users);
   }
@@ -148,9 +160,7 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let users = []
     for(let i=0;i<result.length;i++){
       let user = await getUserWithId(new ObjectId(result[i]));
-      if(user[0]){
-        users.push(user[0])
-      }
+      users.push(user)
     }
     console.log("users",users)
     return Promise.resolve(users)

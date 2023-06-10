@@ -3,3 +3,6 @@
 3. Dateler nasıl olacak ? string/Date
 4. Filter İçerisindeki aggregate yerine filter kullanılabilir mi ?
 5. post.ts içerisindeki -> let data = await filterSkills(dummy_user) kısmındaki parametre dummy_user kalkacak o gitmezse ne gidecek bakılacak
+6. isBookmarked herkes için farklı olabilir onu nasıl yapıcaz ? mesela ben favorime ekledim ama başkası bunu sildi ne olacak
+    Şöyle olabilir. favourite ksımından member, company ve user için kullanıcının takip ettiği kişileri alıcam eğer cell içerisindeki kullanıcı idsi
+    bunların içinde varsa bookmarked olacak yoksa bookmarked olmayacak

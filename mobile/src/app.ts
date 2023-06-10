@@ -31,7 +31,7 @@ import { router as languageRouter } from './routes/language/routes';
 import { router as companyRouter } from './routes/company/routes';
 import { router as memberRouter } from './routes/member/routes';
 
-
+// import { getMemberFavAsUserIds } from './models/favourites'
 
 
 export const app = express();

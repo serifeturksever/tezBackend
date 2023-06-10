@@ -8,7 +8,7 @@ export interface MEMBER {
     "username": string;
     "email": string;
     "password"?: string;
-    "isBookmarked"?: string; 
+    "isBookmarked"?: Boolean; 
 }
 
 const collectionRead = mongodbRead.collection('members');
@@ -17,6 +17,27 @@ const collectionWrite = mongodbWrite.collection('members');
 
 export const getMembers = async (): Promise<any> => {
   return collectionRead.find().toArray()
+}
+
+export const getCompanyWithId = async (company_id: ObjectId): Promise<any> => {
+  return collectionRead.findOne({"_id": company_id});
+}
+
+export const updateMemberBookmark = async (member: MEMBER): Promise<any> => {
+  return collectionRead.updateOne(
+    {
+    "_id": member._id
+    },
+    {
+      "$set": {
+        "isBookmarked": member.isBookmarked
+      }
+    }
+    );
+}
+
+export const getMemberWithId = async (member_id: ObjectId): Promise<any> => {
+  return collectionRead.findOne({"_id": member_id});
 }
 
 // export const filterUsers = async (params: MEMBER): Promise<any> => {

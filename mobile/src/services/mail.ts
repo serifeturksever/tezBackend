@@ -16,7 +16,6 @@ interface MAIL {
 
 export const Mailer = new (class {
   public send(mail: MAIL): Promise<Object> {
-    console.log("BURHAN DÜNDAR MAİL", mail);
     return new Promise(async (resolve, reject) => {
       try {
         let request = bent(<string>VARIABLES.MAILER_HOST, "POST", "json", 200);
@@ -24,7 +23,6 @@ export const Mailer = new (class {
         let result = await request("mail/addToDb", {
           mail,
         });
-        console.log("result: ", result);
 
         resolve({});
       } catch (error: any) {

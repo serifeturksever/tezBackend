@@ -4,8 +4,9 @@ import { getUserAsFav,getUserFavs } from '../../models/favourites';
 import { ObjectId } from 'mongodb';
 
 
+
 export const _getUserFavs = async (req,res) => {
-    let data = await getUserFavs(new ObjectId(req.body.userId))
+    let data = await getUserFavs(new ObjectId(req.body.userId),req.body.fav_type)
     if(data){res.send(data)} else {console.log("data yok")}
  }
 

@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon --watch './**/*.ts' --exec 'ts-node' src/app",
-    "dev:server": "ts-node src/app"
+    "dev:server": "ts-node src/app",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

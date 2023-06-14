@@ -12,7 +12,6 @@ export interface USER {
     "about"?: string;
     "connection_count"?: string; 
     "location"?: string;
-    "isBookmarked"?: Boolean;
 }
 
 const collectionRead = mongodbRead.collection('m_users');
@@ -24,19 +23,6 @@ const collectionWrite = mongodbWrite.collection('m_users');
 
 export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
-}
-
-export const updateUserBookmark = async (user: USER): Promise<any> => {
-  return collectionRead.updateOne(
-    {
-    "_id": user._id
-    },
-    {
-      "$set": {
-        "isBookmarked": user.isBookmarked
-      }
-    }
-    );
 }
 
 export const filterUsers = async (params: USER): Promise<any> => {

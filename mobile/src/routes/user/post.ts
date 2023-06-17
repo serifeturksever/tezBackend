@@ -1,5 +1,5 @@
 import express from 'express';
-import { filterUsers, getCompanyUsersAsUserObj, getFilteredUsers } from '../../models/users';
+import { filterUsers, getCompanyUsersAsUserObj, getFilteredUsers, getUsersWithUserIds } from '../../models/users';
 import { ObjectId } from 'mongodb';
 
 // What types of POST should be included ?
@@ -17,5 +17,11 @@ export const _filter = async (req,res) => {
 
  export const _getFilteredUsers = async (req,res) => {
    const data = await getFilteredUsers(req.body);
+   if(data){res.send(data)} else {console.log("data yok")}
+}
+
+export const _getUsersWithUserIds = async (req,res) => {
+   let _userIdArr = req.body.userIdArr
+   const data = await getUsersWithUserIds(_userIdArr);
    if(data){res.send(data)} else {console.log("data yok")}
 }

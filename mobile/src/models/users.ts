@@ -128,6 +128,15 @@ export const filterUsers = async (params: USER): Promise<any> => {
     return collectionRead.findOne({"_id": user_id});
   }
 
+  export const getUsersWithUserIds = async (userIdArr: Array<string>): Promise<any> => {
+    let users = []
+    for(let i=0;i<userIdArr.length;i++){
+      let user = await getUserWithId(new ObjectId(userIdArr[i]));
+      users.push(user)
+    }
+    return users;
+  }
+
   export const getCompanyUsersAsUserObj = async (company_id: ObjectId): Promise<any> => {
     let users = []
     let companyUsers = await getCompanyUsers(company_id);

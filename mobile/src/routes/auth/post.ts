@@ -3,6 +3,8 @@ import express from "express";
 import { Crypt } from "../../services/guard";
 import { signup, checkEmail, forgotPassword, getHashedPassword, updatePassword } from "../../models/auth";
 import { Mailer } from "../../services/mail";
+import { ObjectId } from "mongodb";
+import { isUsernameExist, updateMemberWithMemberId } from "../../models/members";
 var randomNumber = require("random-number-csprng");
 
 export const _signup = async (req: express.Request, res: express.Response) => {
@@ -15,6 +17,16 @@ export const _signup = async (req: express.Request, res: express.Response) => {
     req.body.password,
     req.body.repassword,
   ];
+
+  const _isUsernameExist = await isUsernameExist(username);
+  console.log(_isUsernameExist)
+  if(_isUsernameExist._id){
+    res.send({
+      status: "error",
+      msg: "This username exists. Please choose another username!"
+    })
+    return;
+  }
 
   const hashedPassword = await crypt.hash(password);
 
@@ -64,7 +76,8 @@ export const _login = async (req: express.Request, res: express.Response) => {
           msg: "success",
           _id: data._id,
           fullname: data.fullname,
-          username: data.username
+          username: data.username,
+          userId: data.userId ? data.userId : ""
         });
       } catch (ex) {
         res.send({
@@ -72,7 +85,8 @@ export const _login = async (req: express.Request, res: express.Response) => {
           msg: "Invalid login info",
           _id: "",
           fullname: "",
-          userName: ""
+          userName: "",
+          userId: ""
         });
       }
     } else {
@@ -115,40 +129,16 @@ export const _forgotPassword = async (
   req: express.Request,
   res: express.Response
 ) => {
-  return new Promise(async (resolve, reject) => {
     const crypt = new Crypt();
     const randomPassword: string = (
       await randomNumber(100000, 999999)
     ).toString();
+    console.log(randomPassword)
     const password = await crypt.hash(randomPassword);
 
     const update = await forgotPassword(req.body.email, password);
-    if (update["status"] === "ok") {
-      Mailer.send({
-        to: `${update["msg"]} <${req.body.email}>`, // to: `${update["msg"]} <${req.body.email}>`,
-        subject: "New Password",
-        template: "forgotPassword",
-        text: `Your user name is ${update["msg"]} and password is ${randomPassword}. Please change your pssword after your first login.`,
-        data: {
-          user: update["msg"],
-          newPassword: randomPassword,
-        },
-      }).then();
-      //log.resStatus = 200;
-      resolve({
-        status: "ok",
-        data: "",
-        msg: "If e-mail exists, new password will be sent.",
-      });
-    } else {
-      //log.resStatus = 200;
-      resolve({
-        status: "ok",
-        data: "",
-        msg: "If e-mail exists, new password will be sent.",
-      });
-    }
-  });
+    res.send(update);
+
 };
 
 export const _updatePassword = async (
@@ -157,22 +147,24 @@ export const _updatePassword = async (
 ) => {
   const crypt = new Crypt();
 
-  let [password, newPassword, newPasswordAgain] = [
+  let [userId, password, newPassword, newPasswordAgain] = [
+    req.body.userId,
     req.body.password,
     req.body.newPassword,
     req.body.newPasswordAgain,
   ];
 
+  console.log(userId,password,newPassword,newPasswordAgain)
+
 
     if (newPassword != newPasswordAgain) {
       res.send({
         status: "error",
-        msg: "New Password and Confirm New Password is not equal.",
-        resStatus: 400,
+        msg: "New Password and Confirm New Password is not equal."
       });
     } else {
       const oldHashedPassword = await getHashedPassword(
-        res.locals.guard.payload.userId);
+        userId);
       const comparePassword = await crypt.compareHashes(
         password,
         oldHashedPassword
@@ -180,32 +172,52 @@ export const _updatePassword = async (
       if (!comparePassword) {
         res.send({
           status: "error",
-          msg: "Invalid old password",
-          resStatus: 400,
+          msg: "Invalid old password"
         });
       } else {
         const hashedPassword = await crypt.hash(newPassword);
         const row: any = await updatePassword(
-          res.locals.guard.payload.userId,
+          userId,
           hashedPassword
         );
+        console.log("row",row)
         if (row["status"] == "ok") {
-          //log.resStatus = 200;
-
           res.send({
             status: "ok",
-            msg: "Password change is successful.",
-            data: " ",
+            msg: "Password changed successfully!"
           });
         } else {
           res.send({
             status: "error",
-            msg: row["msg"],
-            resStatus: 400,
+            msg: "Password could not be changed",
           });
         }
       }
     }
-
 };
+
+export const _updateUsername = async (
+  req: express.Request,
+  res: express.Response
+) => {
+
+  let [memberId, newMemberName] = [
+    req.body.memberId,
+    req.body.newMemberName
+  ];
+
+  let updateResponse = await updateMemberWithMemberId(new ObjectId(memberId), newMemberName)
+  if(!updateResponse.modifiedCount){
+    res.send({
+      status: "error",
+      msg: "User name couldn't be changed!"
+    });
+  } else {
+    res.send({
+      status: "ok",
+      msg: "Username is changed successfully"
+    });
+  }
+};
+
 // https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all

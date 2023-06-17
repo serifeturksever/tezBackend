@@ -13,7 +13,11 @@ Docker çalıştırma yönergesi
 
 docker ps -a -> açık containerları görme
 docker build -t mobile . -> dockerı build et bulunduğun dosyada
-docker run -p 1337:1337 . -> dockerı çalıştırma bulunduğun dosya içinde
+docker run -p 1337:1337 . -> dockerı çalıştırma bulunduğun dosya içinde / nokta yok galiba sonda
 docker stop <container_id> -> durduruyor
 docker kill <container_id> veya <image> sanırım kaldırıyor tamamen
 docker rm ne yapıyor bilmiyorum
+
+docker images ile isim verdiğin dockerı da çağırabilirsin
+docker build -t mobile . olarak build et dockerı
+docker run -p 9001:3002 mail ilk kısım docker içi ikinci kısım app içi

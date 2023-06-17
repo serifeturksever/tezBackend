@@ -12,6 +12,7 @@ export interface IMEMBER {
     "_id"?: ObjectId;
     "fullname": string;
     "username": string;
+    "userId"?: ObjectId;
     "email": string;
     "password": string;
     "createdAt": number;
@@ -99,6 +100,7 @@ export const checkEmail = async (email: string): Promise<any> => {
               "password": 1,
               "fullname": 1,
               "username": 1,
+              "userId": 1
           }
       }
   )

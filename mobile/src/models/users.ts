@@ -25,6 +25,33 @@ export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
 }
 
+export const getUserIdWithProfileLink = async (profileLink: string): Promise<any> => {
+  return collectionRead.findOne(
+    {
+    "profileLink": profileLink
+    },
+    {
+      "projection": {
+        "_id": 0,
+        "userId": "$_id"
+      }
+    }
+    );
+}
+
+export const addMemberIdToUser = async (memberId: ObjectId,profileLink: string): Promise<any> => {
+  return collectionWrite.updateOne(
+    {
+      "profileLink": profileLink
+    },
+    {
+      "$set": {
+        "memberId": memberId
+      }
+    }
+    );
+}
+
 export const filterUsers = async (params: USER): Promise<any> => {
     const {
       full_name,

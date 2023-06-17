@@ -1,6 +1,6 @@
 FROM node:17
 
-WORKDIR /Users/yapikrediteknolojia.s./Desktop/personal-projects/tezBackend/mobile
+WORKDIR /Users/yapikrediteknolojia.s./Desktop/personal-projects/tezBackend/mail
 
 COPY package*.json ./
 
@@ -12,6 +12,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 1337
+EXPOSE 9001:9001
 
 CMD [ "node", "dist/app.js" ]

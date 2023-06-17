@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterExperiences = exports.getUserExperiences = exports.getExperiences = void 0;
+exports.getFilteredExperiences = exports.getCompanyUsers = exports.filterExperiences = exports.getUserExperiences = exports.getExperiences = void 0;
 const app_1 = require("../app");
 // FIXME: Burada company_id alındı company_name yerine. Ya ikisi eklenecek ya da company_name company_id ile alınacak
-const collectionRead = app_1.mongodbRead.collection('experiences');
-const collectionWrite = app_1.mongodbWrite.collection('experiences');
+const collectionRead = app_1.mongodbRead.collection('m_experiences');
+const collectionWrite = app_1.mongodbWrite.collection('m_experiences');
 const getExperiences = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
@@ -94,4 +94,57 @@ const filterExperiences = (params) => __awaiter(void 0, void 0, void 0, function
     return Promise.resolve(value);
 });
 exports.filterExperiences = filterExperiences;
+const getCompanyUsers = (company_id) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = yield collectionRead.aggregate([
+        {
+            '$match': {
+                'company_id': company_id
+            }
+        }, {
+            '$group': {
+                '_id': '$company_id',
+                'users': {
+                    '$push': '$user_id'
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 0
+            }
+        }
+    ]).toArray();
+    let result = data[0] ? data[0]["users"] : [];
+    return Promise.resolve(result);
+});
+exports.getCompanyUsers = getCompanyUsers;
+const getFilteredExperiences = (experiences) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("merhaba ben experiences");
+    let filter = {};
+    let experiencesObjArr = [];
+    experiences.split(",").map(skill => {
+        let obj = {
+            "name": skill
+        };
+        experiencesObjArr.push(obj);
+    });
+    if (experiencesObjArr.length > 1) {
+        filter["$or"] = experiencesObjArr;
+    }
+    else {
+        filter = experiencesObjArr[0];
+    }
+    return collectionRead.aggregate([
+        {
+            '$match': filter
+        }, {
+            '$group': {
+                '_id': '$user_id',
+                'name': {
+                    '$push': '$name'
+                }
+            }
+        }
+    ]).toArray();
+});
+exports.getFilteredExperiences = getFilteredExperiences;
 //# sourceMappingURL=experiences.js.map

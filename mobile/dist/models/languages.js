@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterLanguages = exports.getUserLanguages = exports.getLanguages = void 0;
+exports.getFilteredLanguages = exports.filterLanguages = exports.getUserLanguages = exports.getLanguages = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('languages');
-const collectionWrite = app_1.mongodbWrite.collection('languages');
+const collectionRead = app_1.mongodbRead.collection('m_languages');
+const collectionWrite = app_1.mongodbWrite.collection('m_languages');
 const getLanguages = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
@@ -94,4 +94,34 @@ const filterLanguages = (params) => __awaiter(void 0, void 0, void 0, function* 
     return Promise.resolve(value);
 });
 exports.filterLanguages = filterLanguages;
+const getFilteredLanguages = (languages) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("merhaba ben language");
+    let filter = {};
+    let languagesObjArr = [];
+    languages.split(",").map(skill => {
+        let obj = {
+            "title": skill
+        };
+        languagesObjArr.push(obj);
+    });
+    if (languagesObjArr.length > 1) {
+        filter["$or"] = languagesObjArr;
+    }
+    else {
+        filter = languagesObjArr[0];
+    }
+    return collectionRead.aggregate([
+        {
+            '$match': filter
+        }, {
+            '$group': {
+                '_id': '$user_id',
+                'title': {
+                    '$push': '$title'
+                }
+            }
+        }
+    ]).toArray();
+});
+exports.getFilteredLanguages = getFilteredLanguages;
 //# sourceMappingURL=languages.js.map

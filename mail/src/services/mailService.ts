@@ -34,11 +34,11 @@ export const newUserEmailTemplate = (email: string, username: string) => {
   return {
     from: "dundarburhann@gmail.com",
     to: email,
-    subject: `${username}, Welcome to the our website`,
-    text: "Welcome to the our website",
+    subject: `${username}, Welcome to the our app`,
+    text: "Welcome to the our app",
     html: `
-      <h1>Welcome to our website!</h1>
-      <p>We're glad you've decided to join us. We hope you find everything you're looking for here and enjoy using our site.</p>
+      <h1>Welcome to our app!</h1>
+      <p>We're glad you've decided to join us. We hope you find everything you're looking for here and enjoy using our app.</p>
       <p>If you have any questions or need any help, please don't hesitate to contact us. Thank you for signing up!</p>
     `,
   } as MailOptions;
@@ -60,3 +60,45 @@ export const notifyAdminNewUserEmailTemplate = (
   } as MailOptions;
 };
 
+export const forgotPasswordEmailTemplate = (
+  email: string,
+  password: string
+) => {
+  return {
+    from: "dundarburhann@gmail.com",
+    to: `${email}`,
+    subject: `New Password - email: ${email}`,
+    text: `New Password: ${password} - email: ${email}`,
+    html: `
+      <h1>New Password: ${password}</h1>
+      <p>email: ${email}</p>
+    `,
+  } as MailOptions;
+};
+
+export const updatePasswordEmailTemplate = (email: string) => {
+  console.log("email",email)
+  return {
+    from: "dundarburhann@gmail.com",
+    to: `${email}`,
+    subject: `Update Password`,
+    text: "Your password is updated.",
+    html: `
+      <h1>Your password is updated.</h1>
+      <p>If you did not change your password, please don't hesitate to contact us.</p>
+    `,
+  } as MailOptions;
+};
+
+export const updateUsernameEmailTemplate = (email: string,newUsername:string) => {
+  return {
+    from: "dundarburhann@gmail.com",
+    to: `${email}`,
+    subject: `Update Username`,
+    text: "Your username is updated.",
+    html: `
+      <h1>Your username is updated.</h1>
+      <p>If you did not change your username, please don't hesitate to contact us.</p>
+    `,
+  } as MailOptions;
+};

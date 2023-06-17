@@ -20,6 +20,14 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const routes_1 = require("./routes/user/routes");
 const routes_2 = require("./routes/favourite/routes");
 const routes_3 = require("./routes/auth/routes");
+const routes_4 = require("./routes/skill/routes");
+const routes_5 = require("./routes/experience/routes");
+const routes_6 = require("./routes/education/routes");
+const routes_7 = require("./routes/course/routes");
+const routes_8 = require("./routes/language/routes");
+const routes_9 = require("./routes/company/routes");
+const routes_10 = require("./routes/member/routes");
+// import { getMemberFavAsUserIds } from './models/favourites'
 exports.app = (0, express_1.default)();
 const http = require("http");
 exports.server = http.createServer(exports.app); // FIXME: Is this neccessary ?
@@ -30,12 +38,19 @@ exports.app
     .use((0, cors_1.default)())
     .use('/user', routes_1.router)
     .use('/favourite', routes_2.router)
-    .use('/auth', routes_3.router);
+    .use('/auth', routes_3.router)
+    .use('/skill', routes_4.router)
+    .use('/experience', routes_5.router)
+    .use('/education', routes_6.router)
+    .use('/course', routes_7.router)
+    .use('/language', routes_8.router)
+    .use('/company', routes_9.router)
+    .use('/member', routes_10.router);
 exports.app.get('/', (req, res) => {
     res.send('hii');
 });
 // Start the server
 exports.server.listen(3001, () => {
-    console.log('Server started on port 3001');
+    console.log('Mobile server started on port 3001');
 });
 //# sourceMappingURL=app.js.map

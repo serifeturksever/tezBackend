@@ -13,6 +13,7 @@ exports._get = void 0;
 const users_1 = require("../../models/users");
 // Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
 const _get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("mail girdi");
     let data = yield (0, users_1.getUsers)();
     if (data) {
         res.send(data);

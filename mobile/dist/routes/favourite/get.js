@@ -13,7 +13,7 @@ exports._getUserAsFav = exports._getUserFavs = void 0;
 const favourites_1 = require("../../models/favourites");
 const mongodb_1 = require("mongodb");
 const _getUserFavs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    let data = yield (0, favourites_1.getUserFavs)(new mongodb_1.ObjectId(req.body.userId));
+    let data = yield (0, favourites_1.getUserFavs)(new mongodb_1.ObjectId(req.body.userId), req.body.fav_type);
     if (data) {
         res.send(data);
     }

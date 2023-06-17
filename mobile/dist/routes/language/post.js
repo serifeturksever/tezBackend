@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._filter = void 0;
+exports._getUserLanguages = exports._filter = void 0;
 const languages_1 = require("../../models/languages");
+const mongodb_1 = require("mongodb");
 // What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, languages_1.filterLanguages)(dummy_user);
     if (data) {
@@ -24,4 +24,14 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._filter = _filter;
+const _getUserLanguages = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = yield (0, languages_1.getUserLanguages)(new mongodb_1.ObjectId(req.body.user_id));
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getUserLanguages = _getUserLanguages;
 //# sourceMappingURL=post.js.map

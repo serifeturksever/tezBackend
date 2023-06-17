@@ -142,18 +142,19 @@ export const getHashedPassword = async (userId: string): Promise<any> => {
 export const updatePassword = async (userId: string, hashedPassword: string): Promise<any> => {
   const result = {
       "status": "error",
-      "msg": ""
+      "msg": "",
+      "data":{}
   }
 
   const checkUser = await getUserById(
       new ObjectId(userId)
   )
-
+    console.log("checkUser",checkUser)
   if (!checkUser) {
       result.status = "User does not exist";
   }
   else {
-      collectionWrite.findOneAndUpdate(
+      let data = await collectionWrite.findOneAndUpdate(
           { "_id": new ObjectId(userId) },
           {
               "$set": {
@@ -161,10 +162,11 @@ export const updatePassword = async (userId: string, hashedPassword: string): Pr
                   'updatedAt': new Date().getTime()
               }
           }
-      ).then();
-      result.status = "ok";
-  }
+      );
+      result.data = data
+      result.status = "ok"
 
+  }
   return Promise.resolve(result);
 }
 

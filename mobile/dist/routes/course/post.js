@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._filter = void 0;
+exports._getUserCourses = exports._filter = void 0;
 const courses_1 = require("../../models/courses");
+const mongodb_1 = require("mongodb");
 // What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(req.body);
@@ -24,4 +25,14 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._filter = _filter;
+const _getUserCourses = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = yield (0, courses_1.getUserCourses)(new mongodb_1.ObjectId(req.body.user_id));
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getUserCourses = _getUserCourses;
 //# sourceMappingURL=post.js.map

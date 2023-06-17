@@ -9,14 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterCompanies = exports.getUserCompanies = exports.getCompanies = void 0;
+exports.filterCompanies = exports.getUserCompanies = exports.updateCompanyBookmark = exports.getCompanyWithId = exports.getCompanies = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('companies');
-const collectionWrite = app_1.mongodbWrite.collection('companies');
+const collectionRead = app_1.mongodbRead.collection('m_companies');
+const collectionWrite = app_1.mongodbWrite.collection('m_companies');
 const getCompanies = () => __awaiter(void 0, void 0, void 0, function* () {
-    return collectionRead.find().toArray();
+    return collectionRead.find({ "type": "Company" }).toArray();
 });
 exports.getCompanies = getCompanies;
+const getCompanyWithId = (company_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.findOne({ "_id": company_id });
+});
+exports.getCompanyWithId = getCompanyWithId;
+const updateCompanyBookmark = (company) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.updateOne({
+        "_id": company._id
+    }, {
+        "$set": {
+            "isBookmarked": company.isBookmarked
+        }
+    });
+});
+exports.updateCompanyBookmark = updateCompanyBookmark;
 const getUserCompanies = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "user_id": userId }).toArray();
 });

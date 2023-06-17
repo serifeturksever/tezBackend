@@ -10,5 +10,6 @@ const post_1 = require("./post");
 exports.router = express_1.default.Router();
 exports.router
     .get('/', get_1._get)
-    .post('/filter', post_1._filter);
+    .post('/filter', post_1._filter)
+    .post('/getUserEducations', post_1._getUserEducations);
 //# sourceMappingURL=routes.js.map

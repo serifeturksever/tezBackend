@@ -10,5 +10,8 @@ const post_1 = require("./post");
 exports.router = express_1.default.Router();
 exports.router
     .get('/', get_1._get)
-    .post('/filter', post_1._filter);
+    .post('/filter', post_1._filter)
+    .post('/getCompanyUsersAsUserObj', post_1._getCompanyUsersAsUserObj)
+    .post('/getFilteredUsers', post_1._getFilteredUsers)
+    .post('/getUsersWithUserIds', post_1._getUsersWithUserIds);
 //# sourceMappingURL=routes.js.map

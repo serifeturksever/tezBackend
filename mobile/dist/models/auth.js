@@ -19,21 +19,18 @@ const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
     if (emailRegex.test(signupInfo.email)) {
     }
     const emailExists = yield (0, exports.memberEmailExists)(signupInfo.email);
-    console.log("emailex", emailExists);
     if (emailExists == null) {
         const memberData = {
-            "name": signupInfo.name,
-            "surname": signupInfo.surname,
+            "fullname": signupInfo.fullname,
             "username": signupInfo.username,
             "email": signupInfo.email,
             "password": signupInfo.hashedPassword,
             "createdAt": new Date().getTime(),
         };
         const member = yield (0, exports.createMember)(memberData);
-        console.log("member", member);
         return {
             "status": "ok",
-            "": "msg",
+            "msg": "success",
         };
     }
     else {
@@ -52,7 +49,7 @@ const forgotPassword = (email, hashedPassword) => __awaiter(void 0, void 0, void
     };
     if (user) {
         (0, exports.updatePasswordByUserId)(user._id, hashedPassword).then();
-        result.msg = `${user.surname.toUpperCase()} ${user.name}`;
+        result.msg = `${user.fullname}`;
     }
     else {
         result.status = 'error';
@@ -76,9 +73,9 @@ const checkEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
         "projection": {
             "_id": 1,
             "password": 1,
-            "name": 1,
-            "surname": 1,
+            "fullname": 1,
             "username": 1,
+            "userId": 1
         }
     });
     return Promise.resolve(user);
@@ -109,19 +106,22 @@ exports.getHashedPassword = getHashedPassword;
 const updatePassword = (userId, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
     const result = {
         "status": "error",
-        "msg": ""
+        "msg": "",
+        "data": {}
     };
     const checkUser = yield (0, exports.getUserById)(new mongodb_1.ObjectId(userId));
+    console.log("checkUser", checkUser);
     if (!checkUser) {
         result.status = "User does not exist";
     }
     else {
-        collectionWrite.findOneAndUpdate({ "_id": new mongodb_1.ObjectId(userId) }, {
+        let data = yield collectionWrite.findOneAndUpdate({ "_id": new mongodb_1.ObjectId(userId) }, {
             "$set": {
                 "password": hashedPassword,
                 'updatedAt': new Date().getTime()
             }
-        }).then();
+        });
+        result.data = data;
         result.status = "ok";
     }
     return Promise.resolve(result);

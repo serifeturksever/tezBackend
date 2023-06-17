@@ -12,5 +12,8 @@ exports.router = express_1.default.Router();
 exports.router
     .get('/getUserFavs', get_1._getUserFavs)
     .get('/getUserAsFav', get_1._getUserAsFav)
-    .post('/update', post_1._updateFav);
+    // .post('/update', _updateFav)
+    .post('/getMemberFavAsUserIds', post_1._getMemberFavAsUserIds)
+    .post('/getBookmarkedUsers', post_1._getBookmarkedUsers)
+    .post('/getMemberFollowers', post_1._memberFollowers);
 //# sourceMappingURL=routes.js.map

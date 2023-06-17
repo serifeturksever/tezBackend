@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._filter = void 0;
+exports._getUsersWithUserIds = exports._getFilteredUsers = exports._getCompanyUsersAsUserObj = exports._filter = void 0;
 const users_1 = require("../../models/users");
+const mongodb_1 = require("mongodb");
 // What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, users_1.filterUsers)(dummy_user);
     if (data) {
@@ -24,4 +24,35 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._filter = _filter;
+const _getCompanyUsersAsUserObj = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let data = yield (0, users_1.getCompanyUsersAsUserObj)(new mongodb_1.ObjectId(req.body.company_id));
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getCompanyUsersAsUserObj = _getCompanyUsersAsUserObj;
+const _getFilteredUsers = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const data = yield (0, users_1.getFilteredUsers)(req.body);
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getFilteredUsers = _getFilteredUsers;
+const _getUsersWithUserIds = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let _userIdArr = req.body.userIdArr;
+    const data = yield (0, users_1.getUsersWithUserIds)(_userIdArr);
+    if (data) {
+        res.send(data);
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getUsersWithUserIds = _getUsersWithUserIds;
 //# sourceMappingURL=post.js.map

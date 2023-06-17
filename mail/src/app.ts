@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import { ServicesRequest } from './services/microServices';
 
 export const VARIABLES = process.env;
 if (process.env.NODE_ENV != "production") {
@@ -13,7 +14,7 @@ if (process.env.NODE_ENV != "production") {
   import express from 'express';
   import cors from 'cors';
   import bodyParser from 'body-parser';
-//import { Emailer, newUserEmailTemplate } from './services/mailService';
+  import { Emailer, forgotPasswordEmailTemplate, newUserEmailTemplate } from './services/mailService';
 
 import { router as mailRouter } from './routes/mail/routes';
 

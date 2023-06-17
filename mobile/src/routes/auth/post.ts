@@ -2,9 +2,9 @@ import express from "express";
 // import { requestChecker } from '../../app';
 import { Crypt } from "../../services/guard";
 import { signup, checkEmail, forgotPassword, getHashedPassword, updatePassword } from "../../models/auth";
-import { Mailer } from "../../services/mail";
 import { ObjectId } from "mongodb";
 import { isUsernameExist, updateMemberWithMemberId } from "../../models/members";
+import { ServicesRequest } from "../../services/microServices";
 var randomNumber = require("random-number-csprng");
 
 export const _signup = async (req: express.Request, res: express.Response) => {
@@ -20,7 +20,7 @@ export const _signup = async (req: express.Request, res: express.Response) => {
 
   const _isUsernameExist = await isUsernameExist(username);
   console.log(_isUsernameExist)
-  if(_isUsernameExist._id){
+  if(_isUsernameExist){
     res.send({
       status: "error",
       msg: "This username exists. Please choose another username!"
@@ -46,6 +46,22 @@ export const _signup = async (req: express.Request, res: express.Response) => {
   });
   console.log("register", register);
   if (register.status == "ok") {
+    let data= await ServicesRequest(
+      null,
+      null,
+      "MAILER",
+      "mail/register",
+      "POST",
+      {
+        "email":req.body.email,
+        "username": req.body.username
+      },
+      {
+          "requestFromInside": "ms",
+          "ms": "MOBILE"
+      }
+  )
+  console.log("data",data)
     res.send({
       status: "ok",
       msg: "success",
@@ -133,10 +149,29 @@ export const _forgotPassword = async (
     const randomPassword: string = (
       await randomNumber(100000, 999999)
     ).toString();
-    console.log(randomPassword)
     const password = await crypt.hash(randomPassword);
 
     const update = await forgotPassword(req.body.email, password);
+
+    if(update.status == "ok"){
+
+      let data= await ServicesRequest(
+        null,
+        null,
+        "MAILER",
+        "mail/forgotPassword",
+        "POST",
+        {
+          "email":req.body.email,
+          "password": randomPassword
+        },
+        {
+            "requestFromInside": "ms",
+            "ms": "MOBILE"
+        }
+    )
+      
+    }
     res.send(update);
 
 };
@@ -153,9 +188,6 @@ export const _updatePassword = async (
     req.body.newPassword,
     req.body.newPasswordAgain,
   ];
-
-  console.log(userId,password,newPassword,newPasswordAgain)
-
 
     if (newPassword != newPasswordAgain) {
       res.send({
@@ -180,8 +212,21 @@ export const _updatePassword = async (
           userId,
           hashedPassword
         );
-        console.log("row",row)
         if (row["status"] == "ok") {
+          let data= await ServicesRequest(
+            null,
+            null,
+            "MAILER",
+            "mail/updatePassword",
+            "POST",
+            {
+              "email":row.data.value.email
+            },
+            {
+                "requestFromInside": "ms",
+                "ms": "MOBILE"
+            }
+        )
           res.send({
             status: "ok",
             msg: "Password changed successfully!"

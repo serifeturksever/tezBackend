@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterSkills = exports.getUserSkills = exports.getSkills = void 0;
+exports.getFilteredSkills = exports.filterSkills = exports.getUserSkills = exports.getSkills = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('skills');
-const collectionWrite = app_1.mongodbWrite.collection('skills');
+const collectionRead = app_1.mongodbRead.collection('m_skills');
+const collectionWrite = app_1.mongodbWrite.collection('m_skills');
 const getSkills = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({}).toArray();
 });
@@ -93,4 +93,34 @@ const filterSkills = (params) => __awaiter(void 0, void 0, void 0, function* () 
     return Promise.resolve(value);
 });
 exports.filterSkills = filterSkills;
+const getFilteredSkills = (skills) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("merhaba ben skills");
+    let filter = {};
+    let skillsObjArr = [];
+    skills.split(",").map(skill => {
+        let obj = {
+            "title": skill
+        };
+        skillsObjArr.push(obj);
+    });
+    if (skillsObjArr.length > 1) {
+        filter["$or"] = skillsObjArr;
+    }
+    else {
+        filter = skillsObjArr[0];
+    }
+    return collectionRead.aggregate([
+        {
+            '$match': filter
+        }, {
+            '$group': {
+                '_id': '$user_id',
+                'title': {
+                    '$push': '$title'
+                }
+            }
+        }
+    ]).toArray();
+});
+exports.getFilteredSkills = getFilteredSkills;
 //# sourceMappingURL=skills.js.map

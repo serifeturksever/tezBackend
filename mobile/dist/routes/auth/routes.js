@@ -12,5 +12,6 @@ exports.router
     .post('/signup', post_1._signup)
     .post('/login', post_1._login)
     .post('/forgotPassword', post_1._forgotPassword)
-    .post('/updatePassword', post_1._updatePassword);
+    .post('/updatePassword', post_1._updatePassword)
+    .post('/updateUsername', post_1._updateUsername);
 //# sourceMappingURL=routes.js.map

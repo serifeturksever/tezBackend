@@ -82,8 +82,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
       }
   
-   console.log("filter",filter)
-
     let value = await collectionRead.aggregate([
       {
         $facet: {
@@ -116,7 +114,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
       }
     ]).toArray()
    // console.log("value",JSON.stringify(value))
-   console.log("value", value[0].data)
     
    // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
     return Promise.resolve(value[0].data);
@@ -184,7 +181,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
       let user = await getUserWithId(new ObjectId(result[i]));
       users.push(user)
     }
-    console.log("users",users)
     return Promise.resolve(users)
   }
 

@@ -115,7 +115,6 @@ export const getMemberFavAsUserIds = async (user_id: ObjectId, fav_type): Promis
 };
 
 export const getFollowerMembers = async (fav_id: ObjectId, fav_type): Promise<any> => {
-  console.log(fav_id,fav_type)
   return collectionRead.aggregate(
     [
       {
@@ -155,7 +154,6 @@ export const getBookmarkedUsers = async (user_id: ObjectId, fav_type): Promise<a
 export const memberFollowers = async (fav_id: ObjectId, fav_type: string):Promise<any> => {
   let _followers = []
   let data = (await getFollowerMembers(fav_id,fav_type))[0];
-  console.log(data)
   if(data){
     for(let i = 0;i < data.followers.length;i++){
       let follower = await getMemberWithId(data.followers[i])

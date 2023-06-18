@@ -7,9 +7,10 @@ if (process.env.NODE_ENV != "production") {
   }
 
   import { Db, Decimal128, MongoClient, ObjectId } from 'mongodb';
-  const mongoClient: MongoClient = new MongoClient("mongodb+srv://serifeturksever:lm3vvXWJLBfrYhmh@cluster0.pgszwa5.mongodb.net/test");
-  export const mongodbRead: Db = mongoClient.db("bitirmetezi");
-  export const mongodbWrite: Db = mongoClient.db("bitirmetezi");
+  const mongoClient: MongoClient = new MongoClient("mongodb+srv://serifeturksever:5TuhBQ0KmdHfQ6cx@cluster0.9ioa5np.mongodb.net/");
+                                                    
+  export const mongodbRead: Db = mongoClient.db("bitirmeteziMail");
+  export const mongodbWrite: Db = mongoClient.db("bitirmeteziMail");
   
   import express from 'express';
   import cors from 'cors';
@@ -21,7 +22,7 @@ import { router as mailRouter } from './routes/mail/routes';
 const port = 3002;
 export const app = express();
 const http = require("http");
-export const server = http.createServer(app); // FIXME: Is this neccessary ?
+export const server = http.createServer(app);
 
 // Configure express
 app

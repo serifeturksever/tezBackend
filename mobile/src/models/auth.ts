@@ -15,7 +15,9 @@ export interface IMEMBER {
     "userId"?: ObjectId;
     "email": string;
     "password": string;
-    "createdAt": number;
+    "createdAt"?: number;
+    "updatedAt"?: number;
+    "isBookmarked": false;
 }
 const collectionRead = mongodbRead.collection('members');
 const collectionWrite = mongodbWrite.collection('members');
@@ -32,11 +34,13 @@ export const signup = async (signupInfo: ISIGNUP) => {
 
 
     const memberData: IMEMBER = {
-      "fullname": signupInfo.fullname,
       "username": signupInfo.username,
       "email": signupInfo.email,
       "password": signupInfo.hashedPassword,
       "createdAt": new Date().getTime(),
+      "isBookmarked": false,
+      "fullname": signupInfo.fullname,
+      "updatedAt": new Date().getTime()
     }
 
     const member = await createMember(memberData);
@@ -149,7 +153,6 @@ export const updatePassword = async (userId: string, hashedPassword: string): Pr
   const checkUser = await getUserById(
       new ObjectId(userId)
   )
-    console.log("checkUser",checkUser)
   if (!checkUser) {
       result.status = "User does not exist";
   }

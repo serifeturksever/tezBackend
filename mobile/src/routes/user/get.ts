@@ -6,7 +6,6 @@ import { getUsers } from '../../models/users';
 
  // Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
 export const _get = async (req,res) => {
-    console.log("mail girdi")
     let data = await getUsers()
     if(data){res.send(data)} else {console.log("data yok")}
  }

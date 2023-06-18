@@ -110,7 +110,6 @@ export const filterLanguages = async (params: LANGUAGE): Promise<any> => {
 
 
   export const getFilteredLanguages = async (languages: string): Promise<any> => {
-    console.log("merhaba ben language")
     let filter = {}
     let languagesObjArr = []
     languages.split(",").map(skill => {

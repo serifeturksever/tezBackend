@@ -106,7 +106,6 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
   }
 
   export const getFilteredSkills = async (skills: string): Promise<any> => {
-    console.log("merhaba ben skills")
     let filter = {}
     let skillsObjArr = []
     skills.split(",").map(skill => {

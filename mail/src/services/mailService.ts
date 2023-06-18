@@ -1,6 +1,7 @@
 
 import * as nodemailer from "nodemailer";
 import { MailOptions } from "nodemailer/lib/json-transport";
+import { createMail } from "../models/mail";
 
 export class Emailer {
   private readonly transporter: nodemailer.Transporter;
@@ -19,19 +20,19 @@ export class Emailer {
     return this.transporter.sendMail(mailOptions);
   }
 
-  public notifyAdminForNewUser(email: string, username: string) {
-    this.sendEmail(notifyAdminNewUserEmailTemplate(email, username));
+  public async notifyAdminForNewUser(email: string, username: string) {
+    return this.sendEmail(await notifyAdminNewUserEmailTemplate(email, username));
   }
 
-  public notifyUserForSignup(email: string, username: string) {
-    this.sendEmail(newUserEmailTemplate(email, username));
+  public async notifyUserForSignup (email: string, username: string) {
+    this.sendEmail(await newUserEmailTemplate(email, username));
   }
 }
 
 export const emailer = new Emailer();
 
-export const newUserEmailTemplate = (email: string, username: string) => {
-  return {
+export const newUserEmailTemplate = async (email: string, username: string) => {
+  let mail = {
     from: "dundarburhann@gmail.com",
     to: email,
     subject: `${username}, Welcome to the our app`,
@@ -41,14 +42,16 @@ export const newUserEmailTemplate = (email: string, username: string) => {
       <p>We're glad you've decided to join us. We hope you find everything you're looking for here and enjoy using our app.</p>
       <p>If you have any questions or need any help, please don't hesitate to contact us. Thank you for signing up!</p>
     `,
-  } as MailOptions;
+  } as MailOptions
+  await createMail(mail);
+  return mail;
 };
 
-export const notifyAdminNewUserEmailTemplate = (
+export const notifyAdminNewUserEmailTemplate = async (
   email: string,
   username: string
 ) => {
-  return {
+  let mail = {
     from: "dundarburhann@gmail.com",
     to: "burhandundar2399@gmail.com",
     subject: `New User: ${username} - email: ${email}`,
@@ -57,14 +60,16 @@ export const notifyAdminNewUserEmailTemplate = (
       <h1>New User: ${username}</h1>
       <p>email: ${email}</p>
     `,
-  } as MailOptions;
+  }  as MailOptions
+  await createMail(mail);
+  return mail;
 };
 
-export const forgotPasswordEmailTemplate = (
+export const forgotPasswordEmailTemplate = async (
   email: string,
   password: string
 ) => {
-  return {
+  let mail = {
     from: "dundarburhann@gmail.com",
     to: `${email}`,
     subject: `New Password - email: ${email}`,
@@ -74,11 +79,12 @@ export const forgotPasswordEmailTemplate = (
       <p>email: ${email}</p>
     `,
   } as MailOptions;
+  await createMail(mail);
+  return mail 
 };
 
-export const updatePasswordEmailTemplate = (email: string) => {
-  console.log("email",email)
-  return {
+export const updatePasswordEmailTemplate = async (email: string) => {
+  let mail = {
     from: "dundarburhann@gmail.com",
     to: `${email}`,
     subject: `Update Password`,
@@ -88,10 +94,12 @@ export const updatePasswordEmailTemplate = (email: string) => {
       <p>If you did not change your password, please don't hesitate to contact us.</p>
     `,
   } as MailOptions;
+  await createMail(mail);
+  return mail
 };
 
-export const updateUsernameEmailTemplate = (email: string,newUsername:string) => {
-  return {
+export const updateUsernameEmailTemplate = async (email: string,newUsername:string) => {
+  let mail = {
     from: "dundarburhann@gmail.com",
     to: `${email}`,
     subject: `Update Username`,
@@ -101,4 +109,6 @@ export const updateUsernameEmailTemplate = (email: string,newUsername:string) =>
       <p>If you did not change your username, please don't hesitate to contact us.</p>
     `,
   } as MailOptions;
+  await createMail(mail);
+  return mail;
 };

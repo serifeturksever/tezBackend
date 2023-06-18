@@ -137,7 +137,6 @@ export const filterExperiences = async (params: EDUCATION): Promise<any> => {
 
 
 export const getFilteredExperiences = async (experiences: string): Promise<any> => {
-  console.log("merhaba ben experiences")
     let filter = {}
     let experiencesObjArr = []
     experiences.split(",").map(skill => {

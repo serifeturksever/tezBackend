@@ -62,9 +62,9 @@ export const connectAccountWithLinkedIn = async (memberId: ObjectId, profileLink
       addMemberIdToUser(memberId,profileLink),
       addUserIdToMember(relatedUserId["userId"],memberId)
     ])
-    return Promise.resolve({"status": "ok", "msg": "success"})
+    return Promise.resolve({"status": "ok", "msg": "success", "userId": relatedUserId["userId"]})
   } else {
-    return Promise.resolve({"status": "error", "msg": "Problem occured"})
+    return Promise.resolve({"status": "error", "msg": "Problem occured", userId: ""})
   }
 }
 

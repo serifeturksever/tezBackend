@@ -1,9 +1,8 @@
 import express from "express";
-// import { requestChecker } from '../../app';
 import { Crypt } from "../../services/guard";
 import { signup, checkEmail, forgotPassword, getHashedPassword, updatePassword } from "../../models/auth";
 import { ObjectId } from "mongodb";
-import { isUsernameExist, updateMemberWithMemberId } from "../../models/members";
+import { isUsernameExist } from "../../models/members";
 import { ServicesRequest } from "../../services/microServices";
 var randomNumber = require("random-number-csprng");
 
@@ -61,7 +60,6 @@ export const _signup = async (req: express.Request, res: express.Response) => {
     res.send({
       status: "ok",
       msg: "success",
-      //"token": guardData.token
     });
   } else {
     res.send({
@@ -81,7 +79,6 @@ export const _login = async (req: express.Request, res: express.Response) => {
     const comparePassword = await crypt.compareHashes(password, data.password);
     if (comparePassword) {  
       try {
-        // res.locals.guard = guardData;
         res.send({
           status: "ok",
           msg: "success",
@@ -113,28 +110,6 @@ export const _login = async (req: express.Request, res: express.Response) => {
     });
   }
 };
-
-// const Login = async (res: express.Response, data: Object): Promise<IGuard> => {
-//   const payload = {
-//     "userId": data["userId"],
-//     "userLanguage": data["userLanguage"],
-//     "userRole": data["userRole"],
-//     "userName": data["userName"],
-//     "companyId": data["companyId"],
-//     // "companyName": data["_companyName"],
-//     // "companyLogo": data["_companyLogo"]
-//   };
-
-//   res.locals.guard.payload = payload;
-//   let guardData = res.locals.guard;
-
-//   const values: [any, any] = await Promise.all([
-//     requestChecker.saveTokenToMemoryWithPayload(guardData, res),
-//     requestChecker.saveCompanyToMemory(new ObjectId(data["companyId"]))
-//   ]);
-//   return values[0];
-// }
-
 
 export const _forgotPassword = async (
   req: express.Request,
@@ -234,30 +209,6 @@ export const _updatePassword = async (
         }
       }
     }
-};
-
-export const _updateUsername = async (
-  req: express.Request,
-  res: express.Response
-) => {
-
-  let [memberId, newMemberName] = [
-    req.body.memberId,
-    req.body.newMemberName
-  ];
-
-  let updateResponse = await updateMemberWithMemberId(new ObjectId(memberId), newMemberName)
-  if(!updateResponse.modifiedCount){
-    res.send({
-      status: "error",
-      msg: "User name couldn't be changed!"
-    });
-  } else {
-    res.send({
-      status: "ok",
-      msg: "Username is changed successfully"
-    });
-  }
 };
 
 // https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all

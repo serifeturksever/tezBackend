@@ -17,10 +17,6 @@ export interface USER {
 const collectionRead = mongodbRead.collection('m_users');
 const collectionWrite = mongodbWrite.collection('m_users');
 
-// TODO: Pagination Yapısı için bir sistem düşünülecek -> startData, dataCount, limit tarzı
-// FIXME: userId parametre olarak objectId mi alsın ?
-// Company içerisinde userId yok ?
-
 export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
 }
@@ -57,18 +53,7 @@ export const filterUsers = async (params: USER): Promise<any> => {
       full_name,
       about,
       location,
-      // connection_count -> ekle
     } = params;
-  
-    // let { dataCount } = params;
-    // let { startData } = params;
-  
-    // if (!dataCount) {
-    //   dataCount = 1
-    // }
-    // else if (dataCount > 10000) {
-    //   dataCount = 10000;
-    // }
   
     let filter = {};
   
@@ -100,22 +85,10 @@ export const filterUsers = async (params: USER): Promise<any> => {
                 "location": 1
               }
             },
-            // { $skip: startData ? startData : 0 },
-            // { $limit: dataCount }
           ],
-        //   'count': [
-        //     {
-        //       '$match': filter
-        //     }, {
-        //       '$count': 'count'
-        //     }
-        //   ]
         }
       }
     ]).toArray()
-   // console.log("value",JSON.stringify(value))
-    
-   // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
     return Promise.resolve(value[0].data);
   }
 
@@ -145,10 +118,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
   }
 
   export const getFilteredUsers = async (filterObj: Object): Promise<any> => { // verimli hale getirilecek
-
-    // bu kodun eski hali signalde 08 haziran 2023 11.15
-    // burhandundar2399 mailinde
-
     let queryCount = Object.values(filterObj).filter(key => key != "").length;
 
     const filteredSkills = filterObj["skills"] != "" ? await getFilteredSkills(filterObj["skills"]) : []

@@ -35,24 +35,6 @@ const deleteFav = async (favourite: FAVOURITE): Promise<any> => {
   });
 };
 
-// export const updateBookmark = async (favourite: FAVOURITE ,actionType: String): Promise<any> => {
-//   let isStillBookmarked;
-//   if(actionType == "add"){ isStillBookmarked = true }else if(actionType == "delete"){ isStillBookmarked = false };
-//       if(favourite.fav_type == "user"){
-//         let user = await getUserWithId(favourite.fav_id);
-//         user.isBookmarked = isStillBookmarked
-//         await updateUserBookmark(user);
-//     } else if(favourite.fav_type == "company") {
-//         let company = await getCompanyWithId(favourite.fav_id);
-//         company.isBookmarked = isStillBookmarked
-//         await updateUserBookmark(company);
-//     } else if(favourite.fav_type == "member"){
-//         let member = await getMemberWithId(favourite.fav_id);
-//         member.isBookmarked = isStillBookmarked
-//         await updateUserBookmark(member);
-//     }
-// }
-
 export const updateFav = async (favourite: FAVOURITE): Promise<any> => {
   let _checkFav = await checkFav(favourite);
   if (!_checkFav) {

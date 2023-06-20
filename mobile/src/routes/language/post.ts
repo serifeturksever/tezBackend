@@ -2,8 +2,6 @@ import express from 'express';
 import { filterLanguages, getUserLanguages } from '../../models/languages';
 import { ObjectId } from 'mongodb';
 
-// What types of POST should be included ?
-
 export const _filter = async (req,res) => {
     let dummy_user = req.body
     let data = await filterLanguages(dummy_user)

@@ -1,5 +1,3 @@
-// Tamamlanacak
-
 import express from 'express';
 import { getBookmarkedUsers, getMemberFavAsUserIds, memberFollowers, updateFav } from '../../models/favourites';
 import { ObjectId } from 'mongodb';
@@ -22,7 +20,6 @@ export const _updateFav = async (req,res) => {
         "fav_type": req.body.fav_type
     }
     let data = await getMemberFavAsUserIds(obj.user_id, obj.fav_type);
-    // if(data){res.send(data)} else {console.log("data yok")}
     if(data){
         if(data[0]){
             res.send(data[0].favs)

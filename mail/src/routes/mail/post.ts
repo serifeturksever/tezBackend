@@ -2,9 +2,6 @@ import express from 'express';
 import { Emailer,forgotPasswordEmailTemplate,newUserEmailTemplate, updatePasswordEmailTemplate } from '../../services/mailService';
 
 let emailer = new Emailer()
-
-
-// Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
 export const _sendRegisterMail = async (req,res) => {
     
     emailer.sendEmail(await newUserEmailTemplate(req.body.email,req.body.username));

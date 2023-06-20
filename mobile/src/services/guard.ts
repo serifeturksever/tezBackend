@@ -5,22 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
 import express, { request } from 'express';
 import { VARIABLES } from '../app';
 
-// export interface IGuard {
-//   ip: string;
-//   header: object;
-//   source: string;
-//   origin: string;
-//   acceptLanguage: string;
-//   token: string;
-//   refreshToken: string;
-//   payload: object;
-// }
-
-// export interface IToken {
-//   userId: string;
-//   userName?: string;
-// }
-
 const randomNumber = require("random-number-csprng");
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
@@ -30,8 +14,6 @@ export class Crypt {
     private iv = iv;
     private ALGO = 'aes-256-cbc';
     private saltRounds = 12;
-    // private jwtSecret = VARIABLES.JWT!.toString();
-    // private jwtRefreshSecret = VARIABLES.JWTREFRESH!.toString();
   
     public encrpyt = (message: string): string => {
       const cipher = crypto.createCipheriv(this.ALGO, this.key, this.iv);
@@ -83,15 +65,10 @@ export class Crypt {
     public createCookie(res: express.Response, key: string, value: string, expires: number): Object {
       const expiresAt = expires * 24 * 3600000
       const cookieOptions: Object = {
-        // "domain": "34.90.67.225",
-        // "path": "/admin", 
         "signed": true,
         "httpOnly": false,
-        // "maxAge": expiresAt, // maxAge: 86_400_000, // 1 gun
         "expires": new Date(Date.now() + expiresAt),
         "encode": (e: String): String => e,
-        // "secure": true,
-        // "sameSite": true
       }
       res.clearCookie(key);
       res.cookie(key, value.toString(), cookieOptions);

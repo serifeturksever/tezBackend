@@ -24,24 +24,17 @@ export const app = express();
 const http = require("http");
 export const server = http.createServer(app);
 
-// Configure express
 app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
   .use(cors())
   .use('/mail', mailRouter)
-// let emailer = new Emailer()
-// emailer.sendEmail(newUserEmailTemplate("burhandundar2399@gmail.com","Burhan Dündar"));
 
 
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-// app.listen(port, () => {
-//   return console.log(`Mail server started on port ${port}`);
-// });
 
 server.listen(port, () => {
   console.log(`Mail server started on port ${port}`);

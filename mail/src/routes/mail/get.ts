@@ -1,9 +1,5 @@
-import express from 'express';
-
 import { ServicesRequest } from '../../services/microServices';
-import { ObjectId } from 'mongodb';
 import { getMails } from '../../models/mail';
-// Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
 
 export const _getAllMails = async (req,res) => {
     let mails = await getMails();
@@ -24,11 +20,5 @@ export const _get = async (req,res) => {
             "ms": "MAILER"
         }
     )
-    // await fetch('10.22.168.184:3001/user')
-    // .then((response) => response.json())
-    // .then((body) => {
-    //     console.log(body);
-    // }); 
-
     res.send({"status": data})
  }

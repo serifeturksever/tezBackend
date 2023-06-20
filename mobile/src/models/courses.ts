@@ -21,24 +21,6 @@ export const getUserCourses = async (userId: ObjectId): Promise<any> => {
 }
 
 export const filterCourses = async (title?,company_id?): Promise<any> => {
-
-    // const {
-    //   _id,
-    //   title,
-    //   user_id,
-    //   company_id,
-   
-    // } = params;
-  
-    // let { dataCount } = params;
-    // let { startData } = params;
-  
-    // if (!dataCount) {
-    //   dataCount = 1
-    // }
-    // else if (dataCount > 10000) {
-    //   dataCount = 10000;
-    // }
   
     let filter = {
         "company_id": company_id
@@ -47,29 +29,6 @@ export const filterCourses = async (title?,company_id?): Promise<any> => {
     if (title) {
       filter["title"] = { $regex: new RegExp(`${title}`, "i") };
     }
-  
-    // if (departmentName) {
-    //   try {
-    //     const checkDeparmentsName = await getDepartmentsByLikeName(company_id, departmentName);
-    //     if (checkDeparmentsName.length > 0) {
-    //       const deptIds = checkDeparmentsName.map(function (d: any) { return d._id; });
-    //       filter["department_ids"] = { "$in": deptIds };
-    //     } else {
-    //       filter["department_ids"] = { "$in": [] };
-    //     }
-    //   }
-    //   catch (e) {
-    //     console.log("Department name error", e)
-    //     filter["department_ids"] = { "$in": [] };
-    //   }
-    // }
-  
-    // if (crmId) {
-    //   filter["crmId"] = { $regex: new RegExp(`${crmId}`, "i") };
-    // }
-  
-    //
-
     let value = await collectionRead.aggregate([
       {
         $facet: {
@@ -81,22 +40,11 @@ export const filterCourses = async (title?,company_id?): Promise<any> => {
               "$project": {
                 "_id": 0,
                 "id": "$_id",
-                // "user_id": 1,
-                // "company_id": 1,
                 "title": 1,
 
               }
             },
-            // { $skip: startData ? startData : 0 },
-            // { $limit: dataCount }
           ],
-        //   'count': [
-        //     {
-        //       '$match': filter
-        //     }, {
-        //       '$count': 'count'
-        //     }
-        //   ]
         }
       }
     ])

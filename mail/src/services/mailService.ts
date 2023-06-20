@@ -10,8 +10,8 @@ export class Emailer {
     this.transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "dundarburhann@gmail.com",//process.env.GMAIL_USER,
-        pass: "cfxovwgkcnvcxlld" //process.env.GMAIL_PASSWORD,
+        user: "dundarburhann@gmail.com",
+        pass: "cfxovwgkcnvcxlld"
       },
     });
   }

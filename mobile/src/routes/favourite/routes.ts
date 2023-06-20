@@ -1,5 +1,4 @@
 import express from 'express';
-//import { _get } from './get';
 import { _getBookmarkedUsers, _getMemberFavAsUserIds, _memberFollowers, _updateFav } from './post';
 import { _getUserFavs,_getUserAsFav } from './get';
 

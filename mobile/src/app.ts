@@ -19,7 +19,6 @@ import { getEducations } from './models/educations';
 import { getLanguages } from './models/languages';
 import { getSkills } from './models/skills';
 import { getUsers } from './models/users';
-//import { _get } from './routes/user/get';
 import { router as userRouter } from './routes/user/routes';
 import { router as favouriteRouter } from './routes/favourite/routes';
 import { router as authRouter } from './routes/auth/routes';
@@ -31,14 +30,10 @@ import { router as languageRouter } from './routes/language/routes';
 import { router as companyRouter } from './routes/company/routes';
 import { router as memberRouter } from './routes/member/routes';
 
-// import { getMemberFavAsUserIds } from './models/favourites'
-
-
 export const app = express();
 const http = require("http");
-export const server = http.createServer(app); // FIXME: Is this neccessary ?
+export const server = http.createServer(app);
 
-// Configure express
 app
   .use(bodyParser.json())
   .use(bodyParser.urlencoded({ extended: true }))
@@ -58,7 +53,6 @@ app.get('/', (req, res) => {
   res.send('hii');
 });
 
-// Start the server
 server.listen(3001, () => {
   console.log('Mobile server started on port 3001');
 }); 

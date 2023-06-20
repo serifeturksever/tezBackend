@@ -1,8 +1,6 @@
 import express from 'express';
 import { filterCompanies } from '../../models/companies';
 
-// What types of POST should be included ?
-
 export const _filter = async (req,res) => {
     let dummy_user = req.body
     let data = await filterCompanies(dummy_user)

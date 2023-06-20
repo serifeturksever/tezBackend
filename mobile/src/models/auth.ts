@@ -128,7 +128,6 @@ export const getHashedPassword = async (userId: string): Promise<any> => {
   const user = await collectionRead.findOne(
       {
           "_id": new ObjectId(userId),
-         // "company_id": new ObjectId(companyId)
       },
       {
           "projection": {

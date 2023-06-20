@@ -53,23 +53,17 @@ const deleteFav = async (favourite: FAVOURITE): Promise<any> => {
 //     }
 // }
 
-// export const updateFav = async (favourite: FAVOURITE): Promise<any> => {
-//   let _checkFav = await checkFav(favourite);
-//   console.log(_checkFav)
-//   if (!_checkFav) {
-//     await createFav(favourite);
-//     await updateBookmark(favourite, "add");
-//     return "data created"
-//   } else {
-//     await deleteFav(favourite);
-//     let _stillFaved = await isAnyMemberFavedUser(favourite.fav_id);
-//     console.log(_stillFaved)
-//     if(!_stillFaved){
-//       await updateBookmark(favourite,"delete");
-//     }
-//     return "data deleted"
-//   }
-// };
+export const updateFav = async (favourite: FAVOURITE): Promise<any> => {
+  let _checkFav = await checkFav(favourite);
+  if (!_checkFav) {
+    await createFav(favourite);
+    return "data created"
+  } else {
+    await deleteFav(favourite);
+    return "data deleted"
+  }
+};
+
 const checkFav = async (favourite: FAVOURITE): Promise<any> => {
   return collectionRead.findOne(
     {
@@ -135,20 +129,22 @@ export const getFollowerMembers = async (fav_id: ObjectId, fav_type): Promise<an
 };
 
 export const getBookmarkedUsers = async (user_id: ObjectId, fav_type): Promise<any> => {
-  let users = []
+  let idArray = []
   let data = (await getMemberFavAsUserIds(user_id,fav_type))[0];
   if(data){
     for(let i = 0;i < data.favs.length;i++){
-      let user;
+      let id;
       if(fav_type == "member"){
-        user = await getMemberWithId(data.favs[i])
+        id = await getMemberWithId(data.favs[i])
+      } else if(fav_type == "company"){
+        id = await getCompanyWithId(data.favs[i])
       } else {
-        user = await getUserWithId(data.favs[i])
+        id = await getUserWithId(data.favs[i])
       }
-      users.push(user);
+      idArray.push(id);
     }
   }
-  return Promise.resolve(users)
+  return Promise.resolve(idArray)
 };
 
 export const memberFollowers = async (fav_id: ObjectId, fav_type: string):Promise<any> => {

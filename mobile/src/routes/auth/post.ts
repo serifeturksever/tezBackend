@@ -8,7 +8,6 @@ import { ServicesRequest } from "../../services/microServices";
 var randomNumber = require("random-number-csprng");
 
 export const _signup = async (req: express.Request, res: express.Response) => {
-  console.log("req.body", req.body);
   const crypt = new Crypt();
   let [fullname, username, email, password, repassword] = [
     req.body.fullname,
@@ -19,7 +18,6 @@ export const _signup = async (req: express.Request, res: express.Response) => {
   ];
 
   const _isUsernameExist = await isUsernameExist(username);
-  console.log(_isUsernameExist)
   if(_isUsernameExist){
     res.send({
       status: "error",
@@ -44,24 +42,22 @@ export const _signup = async (req: express.Request, res: express.Response) => {
     hashedPassword,
     email,
   });
-  console.log("register", register);
   if (register.status == "ok") {
     let data= await ServicesRequest(
-      null,
-      null,
-      "MAILER",
-      "mail/register",
-      "POST",
+      null, // -> Express.request
+      null, // -> Express.response
+      "MAILER", // -> İsteğin atıldığı servis MAILER: mail servisi
+      "mail/register", // -> isteğin atıldığı path
+      "POST", // HTTP request tipi
       {
         "email":req.body.email,
-        "username": req.body.username
+        "username": req.body.username // POST HTTP request parametreleri
       },
       {
-          "requestFromInside": "ms",
-          "ms": "MOBILE"
+          "requestFromInside": "ms", 
+          "ms": "MOBILE" // isteği atan servis
       }
   )
-  console.log("data",data)
     res.send({
       status: "ok",
       msg: "success",
@@ -80,7 +76,6 @@ export const _login = async (req: express.Request, res: express.Response) => {
   const password = req.body.password;
 
   const data = await checkEmail(email);
-  console.log(data)
   if (data) {
     const crypt = new Crypt();
     const comparePassword = await crypt.compareHashes(password, data.password);

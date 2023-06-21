@@ -22,45 +22,13 @@ const getUserSkills = (userId) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getUserSkills = getUserSkills;
 const filterSkills = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id, title, user_id,
-    //   image,
-    //   about,
-    //   connection_count,
-    //   location
-     } = params;
-    // let { dataCount } = params;
-    // let { startData } = params;
-    // if (!dataCount) {
-    //   dataCount = 1
-    // }
-    // else if (dataCount > 10000) {
-    //   dataCount = 10000;
-    // }
+    const { _id, title, user_id, } = params;
     let filter = {
-        "_id": _id, //? bak buraya
+        "_id": _id,
     };
     if (title) {
         filter["title"] = { $regex: new RegExp(`${title}`, "i") };
     }
-    // if (departmentName) {
-    //   try {
-    //     const checkDeparmentsName = await getDepartmentsByLikeName(company_id, departmentName);
-    //     if (checkDeparmentsName.length > 0) {
-    //       const deptIds = checkDeparmentsName.map(function (d: any) { return d._id; });
-    //       filter["department_ids"] = { "$in": deptIds };
-    //     } else {
-    //       filter["department_ids"] = { "$in": [] };
-    //     }
-    //   }
-    //   catch (e) {
-    //     console.log("Department name error", e)
-    //     filter["department_ids"] = { "$in": [] };
-    //   }
-    // }
-    // if (crmId) {
-    //   filter["crmId"] = { $regex: new RegExp(`${crmId}`, "i") };
-    // }
-    //
     let value = yield collectionRead.aggregate([
         {
             $facet: {
@@ -76,16 +44,7 @@ const filterSkills = (params) => __awaiter(void 0, void 0, void 0, function* () 
                             "user_id": 1,
                         }
                     },
-                    // { $skip: startData ? startData : 0 },
-                    // { $limit: dataCount }
                 ],
-                //   'count': [
-                //     {
-                //       '$match': filter
-                //     }, {
-                //       '$count': 'count'
-                //     }
-                //   ]
             }
         }
     ])
@@ -94,7 +53,6 @@ const filterSkills = (params) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.filterSkills = filterSkills;
 const getFilteredSkills = (skills) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("merhaba ben skills");
     let filter = {};
     let skillsObjArr = [];
     skills.split(",").map(skill => {

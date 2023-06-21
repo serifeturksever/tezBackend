@@ -22,16 +22,26 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUsernameEmailTemplate = exports.updatePasswordEmailTemplate = exports.forgotPasswordEmailTemplate = exports.notifyAdminNewUserEmailTemplate = exports.newUserEmailTemplate = exports.emailer = exports.Emailer = void 0;
+exports.informMemberFollowersAboutExperienceUpdate = exports.updateUsernameEmailTemplate = exports.updatePasswordEmailTemplate = exports.forgotPasswordEmailTemplate = exports.notifyAdminNewUserEmailTemplate = exports.newUserEmailTemplate = exports.emailer = exports.Emailer = void 0;
 const nodemailer = __importStar(require("nodemailer"));
+const mail_1 = require("../models/mail");
 class Emailer {
     constructor() {
         this.transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
                 user: "dundarburhann@gmail.com",
-                pass: "cfxovwgkcnvcxlld" //process.env.GMAIL_PASSWORD,
+                pass: "cfxovwgkcnvcxlld"
             },
         });
     }
@@ -39,16 +49,20 @@ class Emailer {
         return this.transporter.sendMail(mailOptions);
     }
     notifyAdminForNewUser(email, username) {
-        this.sendEmail((0, exports.notifyAdminNewUserEmailTemplate)(email, username));
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.sendEmail(yield (0, exports.notifyAdminNewUserEmailTemplate)(email, username));
+        });
     }
     notifyUserForSignup(email, username) {
-        this.sendEmail((0, exports.newUserEmailTemplate)(email, username));
+        return __awaiter(this, void 0, void 0, function* () {
+            this.sendEmail(yield (0, exports.newUserEmailTemplate)(email, username));
+        });
     }
 }
 exports.Emailer = Emailer;
 exports.emailer = new Emailer();
-const newUserEmailTemplate = (email, username) => {
-    return {
+const newUserEmailTemplate = (email, username) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
         from: "dundarburhann@gmail.com",
         to: email,
         subject: `${username}, Welcome to the our app`,
@@ -59,10 +73,12 @@ const newUserEmailTemplate = (email, username) => {
       <p>If you have any questions or need any help, please don't hesitate to contact us. Thank you for signing up!</p>
     `,
     };
-};
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
 exports.newUserEmailTemplate = newUserEmailTemplate;
-const notifyAdminNewUserEmailTemplate = (email, username) => {
-    return {
+const notifyAdminNewUserEmailTemplate = (email, username) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
         from: "dundarburhann@gmail.com",
         to: "burhandundar2399@gmail.com",
         subject: `New User: ${username} - email: ${email}`,
@@ -72,10 +88,12 @@ const notifyAdminNewUserEmailTemplate = (email, username) => {
       <p>email: ${email}</p>
     `,
     };
-};
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
 exports.notifyAdminNewUserEmailTemplate = notifyAdminNewUserEmailTemplate;
-const forgotPasswordEmailTemplate = (email, password) => {
-    return {
+const forgotPasswordEmailTemplate = (email, password) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
         from: "dundarburhann@gmail.com",
         to: `${email}`,
         subject: `New Password - email: ${email}`,
@@ -85,11 +103,12 @@ const forgotPasswordEmailTemplate = (email, password) => {
       <p>email: ${email}</p>
     `,
     };
-};
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
 exports.forgotPasswordEmailTemplate = forgotPasswordEmailTemplate;
-const updatePasswordEmailTemplate = (email) => {
-    console.log("email", email);
-    return {
+const updatePasswordEmailTemplate = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
         from: "dundarburhann@gmail.com",
         to: `${email}`,
         subject: `Update Password`,
@@ -99,10 +118,12 @@ const updatePasswordEmailTemplate = (email) => {
       <p>If you did not change your password, please don't hesitate to contact us.</p>
     `,
     };
-};
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
 exports.updatePasswordEmailTemplate = updatePasswordEmailTemplate;
-const updateUsernameEmailTemplate = (email, newUsername) => {
-    return {
+const updateUsernameEmailTemplate = (email, newUsername) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
         from: "dundarburhann@gmail.com",
         to: `${email}`,
         subject: `Update Username`,
@@ -112,6 +133,23 @@ const updateUsernameEmailTemplate = (email, newUsername) => {
       <p>If you did not change your username, please don't hesitate to contact us.</p>
     `,
     };
-};
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
 exports.updateUsernameEmailTemplate = updateUsernameEmailTemplate;
+const informMemberFollowersAboutExperienceUpdate = (email, memberName, experience) => __awaiter(void 0, void 0, void 0, function* () {
+    let mail = {
+        from: "dundarburhann@gmail.com",
+        to: `${email}`,
+        subject: `${memberName} Yeni bir deneyim ekledi!`,
+        text: `${memberName} ${experience.experienceCompany} şirketinde işe başladı`,
+        html: `
+      <h1>Takip ettiğin ${memberName} yeni bir işe girdi detayları seninle paylaştık...</h1>
+      <p> ${memberName} ${experience.experienceCompany} şirketinde ${experience.experienceName} göreviyle ${experience.experienceDate} tarihinde ${experience.experienceLocation} konumunda işe başladı. Ege Üniversitesi değerli üyesini tebrik etmeyi unutma 🎉🎉🎉 </p>
+    `,
+    };
+    yield (0, mail_1.createMail)(mail);
+    return mail;
+});
+exports.informMemberFollowersAboutExperienceUpdate = informMemberFollowersAboutExperienceUpdate;
 //# sourceMappingURL=mailService.js.map

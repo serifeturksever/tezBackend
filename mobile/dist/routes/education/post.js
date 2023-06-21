@@ -12,9 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._getUserEducations = exports._filter = void 0;
 const educations_1 = require("../../models/educations");
 const mongodb_1 = require("mongodb");
-// What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, educations_1.filterEducations)(dummy_user);
     if (data) {

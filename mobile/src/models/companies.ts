@@ -16,6 +16,14 @@ export const getCompanies = async (): Promise<any> => {
     return collectionRead.find({"type": "Company"}).toArray()
 }
 
+export const getCompanyIdWithName = async (companyName: string): Promise<any> => {
+  return collectionRead.findOne({"name": companyName},{"projection": {"_id":1}})
+}
+
+export const createCompany = async (company: COMPANY): Promise<any> => {
+  return collectionWrite.insertOne(company);
+}
+
 export const getCompanyWithId = async (company_id: ObjectId): Promise<any> => {
   return collectionRead.findOne({"_id": company_id});
 }

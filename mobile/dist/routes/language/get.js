@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._get = void 0;
 const languages_1 = require("../../models/languages");
-// Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
 const _get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let data = yield (0, languages_1.getLanguages)();
     if (data) {

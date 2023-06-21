@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._getCompanyUsers = exports._getUserExperiences = exports._filter = void 0;
+exports._getCompanyUsers = exports._getUserExperiences = exports._createExperience = exports._filter = void 0;
 const experiences_1 = require("../../models/experiences");
 const mongodb_1 = require("mongodb");
-// What types of POST should be included ?
+const companies_1 = require("../../models/companies");
+const members_1 = require("../../models/members");
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, experiences_1.filterExperiences)(dummy_user);
     if (data) {
@@ -25,6 +25,48 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports._filter = _filter;
+const _createExperience = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let company_id = yield (0, companies_1.getCompanyIdWithName)(req.body.experienceCompany);
+    if (!company_id) {
+        let company = {
+            name: req.body.experienceCompany,
+            image: "",
+            type: "Company",
+            isBookmarked: false
+        };
+        let res = yield (0, companies_1.createCompany)(company);
+        company_id = res.insertedId;
+        console.log("inserted company id", company_id);
+    }
+    else {
+        company_id = company_id["_id"];
+    }
+    let experience = {
+        "user_id": new mongodb_1.ObjectId(req.body.memberUserId),
+        "name": req.body.experienceName,
+        "company_id": company_id,
+        "establishment": req.body.experienceCompany,
+        "range": req.body.experienceDate,
+        "location": req.body.experienceLocation,
+        "external": true
+    };
+    yield (0, members_1.informFollowerMembersAboutMemberUpdateByEmail)(new mongodb_1.ObjectId(req.body.memberId), req.body.memberFullname, experience);
+    let data = yield (0, experiences_1.createExperience)(experience);
+    if (data) {
+        res.send({
+            "status": "ok",
+            "msg": "Experience Başarıyla eklendi"
+        });
+    }
+    else {
+        res.send({
+            "status": "error",
+            "msg": "Experience Eklenemedi"
+        });
+        console.log("data yok");
+    }
+});
+exports._createExperience = _createExperience;
 const _getUserExperiences = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let data = yield (0, experiences_1.getUserExperiences)(new mongodb_1.ObjectId(req.body.user_id));
     if (data) {

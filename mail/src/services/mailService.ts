@@ -112,3 +112,18 @@ export const updateUsernameEmailTemplate = async (email: string,newUsername:stri
   await createMail(mail);
   return mail;
 };
+
+export const informMemberFollowersAboutExperienceUpdate = async (email: string,memberName, experience: any) => { // any olmasa daha iyi olurdu
+  let mail = {
+    from: "dundarburhann@gmail.com",
+    to: `${email}`,
+    subject: `${memberName} Yeni bir deneyim ekledi!`,
+    text: `${memberName} ${experience.experienceCompany} şirketinde işe başladı`,
+    html: `
+      <h1>Takip ettiğin ${memberName} yeni bir işe girdi detayları seninle paylaştık...</h1>
+      <p> ${memberName} ${experience.establishment} şirketinde ${experience.name} alanında ${experience.range} tarihinde ${experience.location} konumunda işe başladı. Ege Üniversitesi değerli üyesini tebrik etmeyi unutma 🎉🎉🎉 </p>
+    `,
+  } as MailOptions;
+  await createMail(mail);
+  return mail;
+};

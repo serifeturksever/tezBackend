@@ -12,5 +12,6 @@ exports.router
     .get('/', get_1._get)
     .post('/filter', post_1._filter)
     .post('/getUserExperiences', post_1._getUserExperiences)
-    .post('/getCompanyUsers', post_1._getCompanyUsers);
+    .post('/getCompanyUsers', post_1._getCompanyUsers)
+    .post('/createExperience', post_1._createExperience);
 //# sourceMappingURL=routes.js.map

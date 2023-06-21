@@ -9,21 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._get = void 0;
+exports._get = exports._getAllMails = void 0;
 const microServices_1 = require("../../services/microServices");
-// Bu sistemler promise ile nasıl yapılacak kontrol et, bulunduğunda belki ona çeviririz
+const mail_1 = require("../../models/mail");
+const _getAllMails = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let mails = yield (0, mail_1.getMails)();
+    if (mails) {
+        res.send({ mails });
+    }
+    else {
+        console.log("data yok");
+    }
+});
+exports._getAllMails = _getAllMails;
 const _get = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("mail get in get.ts");
     let data = yield (0, microServices_1.ServicesRequest)(null, null, "MOBILE", "user/", "GET", {}, {
         "requestFromInside": "ms",
         "ms": "MAILER"
     });
-    console.log("a", data);
-    // await fetch('10.22.168.184:3001/user')
-    // .then((response) => response.json())
-    // .then((body) => {
-    //     console.log(body);
-    // }); 
     res.send({ "status": data });
 });
 exports._get = _get;

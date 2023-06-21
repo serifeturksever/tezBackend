@@ -10,12 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._connectAccountWithLinkedIn = void 0;
-// import { filterMembers, getCompanyMembersAsUserObj } from '../../models/members';
 const mongodb_1 = require("mongodb");
 const members_1 = require("../../models/members");
-// What types of POST should be included ?
 const _connectAccountWithLinkedIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // bu metoda post atılma şartı ön yüzde mail ile linkedin mail aynı olmalı
     let [memberId, profileLink] = [req.body.memberId, req.body.profileLink];
     let data = yield (0, members_1.connectAccountWithLinkedIn)(new mongodb_1.ObjectId(memberId), profileLink);
     if (data) {

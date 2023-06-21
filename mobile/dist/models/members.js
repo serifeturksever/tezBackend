@@ -9,15 +9,47 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMemberWithId = exports.updateMemberWithMemberId = exports.getMemberIdWithEmail = exports.updateMemberBookmark = exports.connectAccountWithLinkedIn = exports.addUserIdToMember = exports.getCompanyWithId = exports.isUsernameExist = exports.getMembers = void 0;
+exports.getMemberWithId = exports.getMemberIdWithEmail = exports.updateMemberBookmark = exports.connectAccountWithLinkedIn = exports.addUserIdToMember = exports.getCompanyWithId = exports.isUsernameExist = exports.informFollowerMembersAboutMemberUpdateByEmail = exports.getFollowerEmaiById = exports.getMembers = void 0;
 const app_1 = require("../app");
 const users_1 = require("./users");
+const favourites_1 = require("./favourites");
+const microServices_1 = require("../services/microServices");
 const collectionRead = app_1.mongodbRead.collection('members');
 const collectionWrite = app_1.mongodbWrite.collection('members');
 const getMembers = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getMembers = getMembers;
+const getFollowerEmaiById = (fav_id) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.findOne({ "_id": fav_id }, { "projection": { "email": 1 } });
+});
+exports.getFollowerEmaiById = getFollowerEmaiById;
+const informFollowerMembersAboutMemberUpdateByEmail = (fav_id, memberName, newExperience) => __awaiter(void 0, void 0, void 0, function* () {
+    let willInformMemberEmails = [];
+    let willInformUserIds = yield (0, favourites_1.getFollowerMembers)(fav_id, "member");
+    console.log(fav_id);
+    console.log(willInformUserIds);
+    for (let i = 0; i < willInformUserIds.length; i++) {
+        let memberMail = yield (0, exports.getFollowerEmaiById)(willInformUserIds[i]);
+        if (memberMail) {
+            willInformMemberEmails.push(memberMail.email);
+        }
+    }
+    let data = yield (0, microServices_1.ServicesRequest)(null, // -> Express.request
+    null, // -> Express.response
+    "MAILER", // -> İsteğin atıldığı servis MAILER: mail servisi
+    "mail/informFollowerMembers", // -> isteğin atıldığı path
+    "POST", // HTTP request tipi
+    {
+        "emails": willInformMemberEmails,
+        "memberName": memberName,
+        "newExperience": newExperience
+    }, {
+        "requestFromInside": "ms",
+        "ms": "MOBILE" // isteği atan servis
+    });
+});
+exports.informFollowerMembersAboutMemberUpdateByEmail = informFollowerMembersAboutMemberUpdateByEmail;
 const isUsernameExist = (username) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({
         "username": username
@@ -46,8 +78,6 @@ const connectAccountWithLinkedIn = (memberId, profileLink) => __awaiter(void 0, 
     let relatedUserId = yield (0, users_1.getUserIdWithProfileLink)(profileLink);
     console.log("relatedUserId ===> ", relatedUserId);
     if (relatedUserId) {
-        // let _addMemberIdToUser = await addMemberIdToUser(memberId,profileLink);
-        // let _addUserrIdToMember = await addUserIdToMember(relatedUserId,memberId);
         yield Promise.all([
             (0, users_1.addMemberIdToUser)(memberId, profileLink),
             (0, exports.addUserIdToMember)(relatedUserId["userId"], memberId)
@@ -79,88 +109,8 @@ const getMemberIdWithEmail = (memberEmail) => __awaiter(void 0, void 0, void 0, 
     });
 });
 exports.getMemberIdWithEmail = getMemberIdWithEmail;
-const updateMemberWithMemberId = (member_id, newUserName) => __awaiter(void 0, void 0, void 0, function* () {
-    return collectionWrite.updateOne({ "_id": member_id }, { "$set": { "username": newUserName } });
-});
-exports.updateMemberWithMemberId = updateMemberWithMemberId;
 const getMemberWithId = (member_id) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({ "_id": member_id });
 });
 exports.getMemberWithId = getMemberWithId;
-// export const filterUsers = async (params: MEMBER): Promise<any> => {
-//     const {
-//       full_name,
-//       about,
-//       location,
-//       // connection_count -> ekle
-//     } = params;
-//     // let { dataCount } = params;
-//     // let { startData } = params;
-//     // if (!dataCount) {
-//     //   dataCount = 1
-//     // }
-//     // else if (dataCount > 10000) {
-//     //   dataCount = 10000;
-//     // }
-//     let filter = {};
-//     if (full_name) {
-//       filter["full_name"] = { $regex: new RegExp(`${full_name}`, "i") };
-//     }
-//     if (about) {
-//       filter["about"] = { $regex: new RegExp(`${about}`, "i") };
-//     }
-//     if (location) {
-//         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
-//       }
-//    console.log("filter",filter)
-//     let value = await collectionRead.aggregate([
-//       {
-//         $facet: {
-//           "data": [
-//             {
-//               $match: filter
-//             },
-//             {
-//               "$project": {
-//                 "_id": 0,
-//                 "id": "$_id",
-//                 "full_name": 1,
-//                 "image": 1,
-//                 "about": 1,
-//                 "connection_count": 1,
-//                 "location": 1
-//               }
-//             },
-//             // { $skip: startData ? startData : 0 },
-//             // { $limit: dataCount }
-//           ],
-//         //   'count': [
-//         //     {
-//         //       '$match': filter
-//         //     }, {
-//         //       '$count': 'count'
-//         //     }
-//         //   ]
-//         }
-//       }
-//     ]).toArray()
-//    // console.log("value",JSON.stringify(value))
-//    console.log("value", value[0].data)
-//    // eğer bu filtreye uygun kullanıcı yoksa array boş geliyor
-//     return Promise.resolve(value[0].data);
-//   }
-// export const getUserWithId = async (user_id: ObjectId): Promise<any> => {
-//   return collectionRead.find({"_id": user_id}).toArray()
-// }
-// export const getCompanyUsersAsUserObj = async (company_id: ObjectId): Promise<any> => {
-//   let users = []
-//   let companyUsers = await getCompanyUsers(company_id);
-//   for(let i=0;i<companyUsers.length;i++) {
-//     let user = await getUserWithId(companyUsers[i]);
-//     if(user[0]){
-//       users.push(user[0])
-//     }
-//   }
-//   return Promise.resolve(users);
-// }
 //# sourceMappingURL=members.js.map

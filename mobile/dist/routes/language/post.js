@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._getUserLanguages = exports._filter = void 0;
 const languages_1 = require("../../models/languages");
 const mongodb_1 = require("mongodb");
-// What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let dummy_user = req.body;
     let data = yield (0, languages_1.filterLanguages)(dummy_user);

@@ -9,57 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFilteredExperiences = exports.getCompanyUsers = exports.filterExperiences = exports.getUserExperiences = exports.getExperiences = void 0;
+exports.getFilteredExperiences = exports.getCompanyUsers = exports.filterExperiences = exports.getUserExperiences = exports.createExperience = exports.getExperiences = void 0;
 const app_1 = require("../app");
-// FIXME: Burada company_id alındı company_name yerine. Ya ikisi eklenecek ya da company_name company_id ile alınacak
 const collectionRead = app_1.mongodbRead.collection('m_experiences');
 const collectionWrite = app_1.mongodbWrite.collection('m_experiences');
 const getExperiences = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getExperiences = getExperiences;
+const createExperience = (experience) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionWrite.insertOne(experience);
+});
+exports.createExperience = createExperience;
 const getUserExperiences = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "user_id": userId }).toArray();
 });
 exports.getUserExperiences = getUserExperiences;
 const filterExperiences = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, 
-    // company_id,
-    //   establishment,
-    location } = params;
-    // let { dataCount } = params;
-    // let { startData } = params;
-    // if (!dataCount) {
-    //   dataCount = 1
-    // }
-    // else if (dataCount > 10000) {
-    //   dataCount = 10000;
-    // }
-    let filter = {}; // "company_id":company_id,
+    const { name, location } = params;
+    let filter = {};
     if (name) {
         filter["name"] = { $regex: new RegExp(`${name}`, "i") };
     }
     if (location) {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
     }
-    // ! datelere gore filter yapılacak.
-    //   let and: any = []
-    //   if (min_date && max_date) {
-    //     and.push(
-    //         {"start_date": {$gte: min_date}},
-    //         {"end_date": {$lte: max_date}},
-    //     )
-    // }
-    // else if (min_date && !max_date) {
-    //     filter["createdAt"] = {
-    //         $gte: min_date
-    //     }
-    // }
-    // else if (!min_date && max_date) {
-    //     filter["createdAt"] = {
-    //         $lte: max_date
-    //     }
-    // }
     let value = yield collectionRead.aggregate([
         {
             $facet: {
@@ -77,16 +51,7 @@ const filterExperiences = (params) => __awaiter(void 0, void 0, void 0, function
                             "date": 1
                         }
                     },
-                    // { $skip: startData ? startData : 0 },
-                    // { $limit: dataCount }
                 ],
-                //   'count': [
-                //     {
-                //       '$match': filter
-                //     }, {
-                //       '$count': 'count'
-                //     }
-                //   ]
             }
         }
     ])
@@ -118,7 +83,6 @@ const getCompanyUsers = (company_id) => __awaiter(void 0, void 0, void 0, functi
 });
 exports.getCompanyUsers = getCompanyUsers;
 const getFilteredExperiences = (experiences) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("merhaba ben experiences");
     let filter = {};
     let experiencesObjArr = [];
     experiences.split(",").map(skill => {

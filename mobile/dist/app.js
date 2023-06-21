@@ -16,7 +16,6 @@ exports.mongodbWrite = mongoClient.db("bitirmetezi");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
-//import { _get } from './routes/user/get';
 const routes_1 = require("./routes/user/routes");
 const routes_2 = require("./routes/favourite/routes");
 const routes_3 = require("./routes/auth/routes");
@@ -27,11 +26,9 @@ const routes_7 = require("./routes/course/routes");
 const routes_8 = require("./routes/language/routes");
 const routes_9 = require("./routes/company/routes");
 const routes_10 = require("./routes/member/routes");
-// import { getMemberFavAsUserIds } from './models/favourites'
 exports.app = (0, express_1.default)();
 const http = require("http");
-exports.server = http.createServer(exports.app); // FIXME: Is this neccessary ?
-// Configure express
+exports.server = http.createServer(exports.app);
 exports.app
     .use(body_parser_1.default.json())
     .use(body_parser_1.default.urlencoded({ extended: true }))
@@ -49,7 +46,6 @@ exports.app
 exports.app.get('/', (req, res) => {
     res.send('hii');
 });
-// Start the server
 exports.server.listen(3001, () => {
     console.log('Mobile server started on port 3001');
 });

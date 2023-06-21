@@ -7,11 +7,8 @@ exports.router = void 0;
 const express_1 = __importDefault(require("express"));
 const get_1 = require("./get");
 const post_1 = require("./post");
-// import { _filter, _getCompanyUsersAsUserObj } from './post';
 exports.router = express_1.default.Router();
 exports.router
     .get('/', get_1._get)
     .post('/connectAccountWithLinkedIn', post_1._connectAccountWithLinkedIn);
-// .post('/filter', _filter)
-// .post('/getCompanyUsersAsUserObj', _getCompanyUsersAsUserObj)
 //# sourceMappingURL=routes.js.map

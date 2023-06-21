@@ -1,6 +1,6 @@
 import express from 'express';
 import { _get, _getAllMails } from './get';
-import { _sendRegisterMail,_sendForgotPasswordMail,_sendUpdatePasswordMail } from './post';
+import { _sendRegisterMail,_sendForgotPasswordMail,_sendUpdatePasswordMail, _informFollowerMembers } from './post';
 
 export const router = express.Router();
 
@@ -10,3 +10,4 @@ router
   .post('/register',_sendRegisterMail)
   .post('/forgotPassword',_sendForgotPasswordMail)
   .post('/updatePassword',_sendUpdatePasswordMail)
+  .post('/informFollowerMembers',_informFollowerMembers)

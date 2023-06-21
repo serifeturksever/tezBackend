@@ -21,11 +21,13 @@ const signup = (signupInfo) => __awaiter(void 0, void 0, void 0, function* () {
     const emailExists = yield (0, exports.memberEmailExists)(signupInfo.email);
     if (emailExists == null) {
         const memberData = {
-            "fullname": signupInfo.fullname,
             "username": signupInfo.username,
             "email": signupInfo.email,
             "password": signupInfo.hashedPassword,
             "createdAt": new Date().getTime(),
+            "isBookmarked": false,
+            "fullname": signupInfo.fullname,
+            "updatedAt": new Date().getTime()
         };
         const member = yield (0, exports.createMember)(memberData);
         return {
@@ -92,7 +94,6 @@ exports.updatePasswordByUserId = updatePasswordByUserId;
 const getHashedPassword = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield collectionRead.findOne({
         "_id": new mongodb_1.ObjectId(userId),
-        // "company_id": new ObjectId(companyId)
     }, {
         "projection": {
             "_id": 0,
@@ -110,7 +111,6 @@ const updatePassword = (userId, hashedPassword) => __awaiter(void 0, void 0, voi
         "data": {}
     };
     const checkUser = yield (0, exports.getUserById)(new mongodb_1.ObjectId(userId));
-    console.log("checkUser", checkUser);
     if (!checkUser) {
         result.status = "User does not exist";
     }

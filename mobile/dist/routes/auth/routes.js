@@ -8,10 +8,8 @@ const express_1 = __importDefault(require("express"));
 const post_1 = require("./post");
 exports.router = express_1.default.Router();
 exports.router
-    //.get('/', _get)
     .post('/signup', post_1._signup)
     .post('/login', post_1._login)
     .post('/forgotPassword', post_1._forgotPassword)
-    .post('/updatePassword', post_1._updatePassword)
-    .post('/updateUsername', post_1._updateUsername);
+    .post('/updatePassword', post_1._updatePassword);
 //# sourceMappingURL=routes.js.map

@@ -22,22 +22,7 @@ const getUserEducations = (userId) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getUserEducations = getUserEducations;
 const filterEducations = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { _id, title, 
-    //user_id,
-    company_id, employment_id, location, min_date, max_date,
-    //   image,
-    //   about,
-    //   connection_count,
-    //   location
-     } = params;
-    // let { dataCount } = params;
-    // let { startData } = params;
-    // if (!dataCount) {
-    //   dataCount = 1
-    // }
-    // else if (dataCount > 10000) {
-    //   dataCount = 10000;
-    // }
+    const { _id, title, company_id, employment_id, location, min_date, max_date, } = params;
     let filter = {
         "company_id": company_id,
         "employment_id": employment_id,
@@ -48,24 +33,6 @@ const filterEducations = (params) => __awaiter(void 0, void 0, void 0, function*
     if (location) {
         filter["location"] = { $regex: new RegExp(`${location}`, "i") };
     }
-    // ! datelere gore filter yapılacak.
-    //   let and: any = []
-    //   if (min_date && max_date) {
-    //     and.push(
-    //         {"start_date": {$gte: min_date}},
-    //         {"end_date": {$lte: max_date}},
-    //     )
-    // }
-    // else if (min_date && !max_date) {
-    //     filter["createdAt"] = {
-    //         $gte: min_date
-    //     }
-    // }
-    // else if (!min_date && max_date) {
-    //     filter["createdAt"] = {
-    //         $lte: max_date
-    //     }
-    // }
     let value = yield collectionRead.aggregate([
         {
             $facet: {
@@ -86,16 +53,7 @@ const filterEducations = (params) => __awaiter(void 0, void 0, void 0, function*
                             "end_date": 1,
                         }
                     },
-                    // { $skip: startData ? startData : 0 },
-                    // { $limit: dataCount }
                 ],
-                //   'count': [
-                //     {
-                //       '$match': filter
-                //     }, {
-                //       '$count': 'count'
-                //     }
-                //   ]
             }
         }
     ])

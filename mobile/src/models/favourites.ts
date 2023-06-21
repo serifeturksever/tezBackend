@@ -90,7 +90,7 @@ export const getMemberFavAsUserIds = async (user_id: ObjectId, fav_type): Promis
   ).toArray();
 };
 
-export const getFollowerMembers = async (fav_id: ObjectId, fav_type): Promise<any> => {
+export const getFollowerMembers = async (fav_id: ObjectId, fav_type: string): Promise<any> => {
   return collectionRead.aggregate(
     [
       {

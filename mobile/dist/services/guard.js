@@ -36,20 +36,6 @@ exports.Crypt = void 0;
 const crypto = __importStar(require("crypto"));
 const bcrypt = __importStar(require("bcrypt"));
 const uuid_1 = require("uuid");
-// export interface IGuard {
-//   ip: string;
-//   header: object;
-//   source: string;
-//   origin: string;
-//   acceptLanguage: string;
-//   token: string;
-//   refreshToken: string;
-//   payload: object;
-// }
-// export interface IToken {
-//   userId: string;
-//   userName?: string;
-// }
 const randomNumber = require("random-number-csprng");
 const key = crypto.randomBytes(32);
 const iv = crypto.randomBytes(16);
@@ -59,8 +45,6 @@ class Crypt {
         this.iv = iv;
         this.ALGO = 'aes-256-cbc';
         this.saltRounds = 12;
-        // private jwtSecret = VARIABLES.JWT!.toString();
-        // private jwtRefreshSecret = VARIABLES.JWTREFRESH!.toString();
         this.encrpyt = (message) => {
             const cipher = crypto.createCipheriv(this.ALGO, this.key, this.iv);
             let enc = cipher.update(message, 'utf8', 'base64');
@@ -107,15 +91,10 @@ class Crypt {
     createCookie(res, key, value, expires) {
         const expiresAt = expires * 24 * 3600000;
         const cookieOptions = {
-            // "domain": "34.90.67.225",
-            // "path": "/admin", 
             "signed": true,
             "httpOnly": false,
-            // "maxAge": expiresAt, // maxAge: 86_400_000, // 1 gun
             "expires": new Date(Date.now() + expiresAt),
             "encode": (e) => e,
-            // "secure": true,
-            // "sameSite": true
         };
         res.clearCookie(key);
         res.cookie(key, value.toString(), cookieOptions);

@@ -11,9 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports._filter = void 0;
 const companies_1 = require("../../models/companies");
-// What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(req.body);
     let dummy_user = req.body;
     let data = yield (0, companies_1.filterCompanies)(dummy_user);
     if (data) {

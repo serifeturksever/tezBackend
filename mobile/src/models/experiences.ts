@@ -1,14 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { mongodbRead, mongodbWrite } from '../app';
 
-export interface EDUCATION {
+export interface EXPERIENCE {
     "_id"?: ObjectId;
     "user_id"?: ObjectId;
     "name"?: string;
     "company_id"?: ObjectId;
     "establishment"?: string;
-    "date"?: Date;
+    "range"?: Date;
     "location"?: string;
+    "external"?: boolean;
     
 }
 const collectionRead = mongodbRead.collection('m_experiences');
@@ -18,11 +19,15 @@ export const getExperiences = async (): Promise<any> => {
     return collectionRead.find().toArray()
 }
 
+export const createExperience = async (experience: EXPERIENCE): Promise<any> => {
+  return collectionWrite.insertOne(experience)
+}
+
 export const getUserExperiences = async (userId: ObjectId): Promise<any> => {
   return collectionRead.find({"user_id": userId}).toArray()
 }
 
-export const filterExperiences = async (params: EDUCATION): Promise<any> => {
+export const filterExperiences = async (params: EXPERIENCE): Promise<any> => {
 
     const {
         name,

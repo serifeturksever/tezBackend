@@ -113,7 +113,7 @@ export const updateUsernameEmailTemplate = async (email: string,newUsername:stri
   return mail;
 };
 
-export const informMemberFollowersAboutExperienceUpdate = async (email: string,memberName, experience: any) => { // any olmasa daha iyi olurdu
+export const informMemberFollowersAboutExperienceUpdate = async (email: string,memberName, experience: any) => {
   let mail = {
     from: "dundarburhann@gmail.com",
     to: `${email}`,

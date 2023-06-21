@@ -117,7 +117,7 @@ export const filterUsers = async (params: USER): Promise<any> => {
     return Promise.resolve(users);
   }
 
-  export const getFilteredUsers = async (filterObj: Object): Promise<any> => { // verimli hale getirilecek
+  export const getFilteredUsers = async (filterObj: Object): Promise<any> => {
     let queryCount = Object.values(filterObj).filter(key => key != "").length;
 
     const filteredSkills = filterObj["skills"] != "" ? await getFilteredSkills(filterObj["skills"]) : []

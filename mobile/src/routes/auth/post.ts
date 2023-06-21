@@ -210,5 +210,3 @@ export const _updatePassword = async (
       }
     }
 };
-
-// https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all

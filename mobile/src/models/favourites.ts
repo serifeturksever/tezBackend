@@ -19,7 +19,7 @@ export const getUserFavs = async (userId: ObjectId, fav_type: string): Promise<a
   return collectionRead.find({"user_id": userId, "fav_type": fav_type}).toArray()
 }
 
-export const getUserAsFav = async (favId: ObjectId): Promise<any> => { // emin deilim burdan
+export const getUserAsFav = async (favId: ObjectId): Promise<any> => {
     return collectionRead.find({"fav_id": favId}).toArray()
 }
 

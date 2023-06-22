@@ -14,8 +14,8 @@ export interface USER {
     "location"?: string;
 }
 
-const collectionRead = mongodbRead.collection('m_users');
-const collectionWrite = mongodbWrite.collection('m_users');
+const collectionRead = mongodbRead.collection('users');
+const collectionWrite = mongodbWrite.collection('users');
 
 export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()

@@ -12,8 +12,8 @@ export interface EXPERIENCE {
     "external"?: boolean;
     
 }
-const collectionRead = mongodbRead.collection('m_experiences');
-const collectionWrite = mongodbWrite.collection('m_experiences');
+const collectionRead = mongodbRead.collection('experiences');
+const collectionWrite = mongodbWrite.collection('experiences');
 
 export const getExperiences = async (): Promise<any> => {
     return collectionRead.find().toArray()

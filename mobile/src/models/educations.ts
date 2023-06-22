@@ -13,8 +13,8 @@ export interface EDUCATION {
     
 }
 
-const collectionRead = mongodbRead.collection('m_educations');
-const collectionWrite = mongodbWrite.collection('m_educations');
+const collectionRead = mongodbRead.collection('educations');
+const collectionWrite = mongodbWrite.collection('educations');
 
 export const getEducations = async (): Promise<any> => {
     return collectionRead.find().toArray()

@@ -9,8 +9,8 @@ export interface LANGUAGE {
     
 }
 
-const collectionRead = mongodbRead.collection('m_languages');
-const collectionWrite = mongodbWrite.collection('m_languages');
+const collectionRead = mongodbRead.collection('languages');
+const collectionWrite = mongodbWrite.collection('languages');
 
 export const getLanguages = async (): Promise<any> => {
     return collectionRead.find().toArray()

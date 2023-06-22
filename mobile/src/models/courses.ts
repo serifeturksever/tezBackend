@@ -9,8 +9,8 @@ export interface COURSE {
     
 }
 
-const collectionRead = mongodbRead.collection('m_courses');
-const collectionWrite = mongodbWrite.collection('m_courses');
+const collectionRead = mongodbRead.collection('courses');
+const collectionWrite = mongodbWrite.collection('courses');
 
 export const getCourses = async (): Promise<any> => {
     return collectionRead.find().toArray()

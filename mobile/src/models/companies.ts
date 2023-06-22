@@ -9,8 +9,8 @@ export interface COMPANY {
     "isBookmarked"?: Boolean;
 }
 
-const collectionRead = mongodbRead.collection('m_companies');
-const collectionWrite = mongodbWrite.collection('m_companies');
+const collectionRead = mongodbRead.collection('companies');
+const collectionWrite = mongodbWrite.collection('companies');
 
 export const getCompanies = async (): Promise<any> => {
     return collectionRead.find({"type": "Company"}).toArray()

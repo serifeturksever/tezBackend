@@ -1,6 +1,6 @@
 import express from 'express';
 import { _get } from './get';
-import { _createExperience, _filter, _getCompanyUsers, _getUserExperiences } from './post';
+import { _createExperience, _filter, _getCompanyExperienceCount, _getCompanyUsers, _getUserExperiences } from './post';
 
 export const router = express.Router();
 
@@ -10,3 +10,4 @@ router
   .post('/getUserExperiences', _getUserExperiences)
   .post('/getCompanyUsers', _getCompanyUsers)
   .post('/createExperience', _createExperience)
+  .post('/companyExperienceCount', _getCompanyExperienceCount)

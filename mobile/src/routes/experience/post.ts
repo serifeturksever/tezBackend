@@ -1,5 +1,5 @@
 import express from 'express';
-import { createExperience, filterExperiences, getCompanyUsers, getUserExperiences } from '../../models/experiences';
+import { createExperience, filterExperiences, getCompanyExperienceCount, getCompanyUsers, getUserExperiences } from '../../models/experiences';
 import { ObjectId } from 'mongodb';
 import { createCompany, getCompanyIdWithName } from '../../models/companies';
 import { informFollowerMembersAboutMemberUpdateByEmail } from '../../models/members';
@@ -60,5 +60,10 @@ export const _filter = async (req,res) => {
 
 export const _getCompanyUsers = async(req,res) => {
     let data = await getCompanyUsers(new ObjectId(req.body.company_id))
+    if(data){res.send(data)} else {console.log("data yok")}
+}
+
+export const _getCompanyExperienceCount = async(req,res) => {
+    let data = await getCompanyExperienceCount(new ObjectId(req.body.companyId))
     if(data){res.send(data)} else {console.log("data yok")}
 }

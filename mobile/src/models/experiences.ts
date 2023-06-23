@@ -19,6 +19,13 @@ export const getExperiences = async (): Promise<any> => {
     return collectionRead.find().toArray()
 }
 
+export const getCompanyExperienceCount = async (company_id: ObjectId): Promise<any> => {
+  let count = (await collectionRead.find({"company_id": company_id}).toArray()).length
+  return {
+    "count": count
+  }
+}
+
 export const createExperience = async (experience: EXPERIENCE): Promise<any> => {
   return collectionWrite.insertOne(experience)
 }

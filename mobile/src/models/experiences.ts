@@ -20,9 +20,9 @@ export const getExperiences = async (): Promise<any> => {
 }
 
 export const getCompanyExperienceCount = async (company_id: ObjectId): Promise<any> => {
-  let count = (await collectionRead.find({"company_id": company_id}).toArray()).length
+  let companyExperienceCount = await getCompanyUsers(company_id);
   return {
-    "count": count
+    "count": companyExperienceCount.length
   }
 }
 
@@ -87,7 +87,7 @@ export const filterExperiences = async (params: EXPERIENCE): Promise<any> => {
           '$group': {
             '_id': '$company_id', 
             'users': {
-              '$push': '$user_id'
+              '$addToSet': '$user_id'
             }
           }
         }, {

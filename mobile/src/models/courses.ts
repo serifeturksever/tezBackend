@@ -6,6 +6,7 @@ export interface COURSE {
     "title"?: string;
     "user_id"?: ObjectId;
     "company_id"?: ObjectId;
+    "company_name"?: string; 
     
 }
 
@@ -17,7 +18,44 @@ export const getCourses = async (): Promise<any> => {
 }
 
 export const getUserCourses = async (userId: ObjectId): Promise<any> => {
-  return collectionRead.find({"user_id": userId}).toArray()
+  // return collectionRead.find({"user_id": userId}).toArray()
+  return collectionRead.aggregate(
+    [
+      {
+        '$match': {
+          'user_id': userId
+        }
+      }, {
+        '$lookup': {
+          'from': 'companies', 
+          'localField': 'company_id', 
+          'foreignField': '_id', 
+          'as': 'company'
+        }
+      }, {
+        '$addFields': {
+          'company': {
+            '$arrayElemAt': [
+              '$company', 0
+            ]
+          }, 
+          'company_name': {
+            '$arrayElemAt': [
+              '$company.name', 0
+            ]
+          }
+        }
+      }, {
+        '$project': {
+          '_id': 1, 
+          'title': 1, 
+          'user_id': 1, 
+          'company_id': 1, 
+          'company_name': '$company_name'
+        }
+      }
+    ]
+  ).toArray();
 }
 
 export const filterCourses = async (title?,company_id?): Promise<any> => {

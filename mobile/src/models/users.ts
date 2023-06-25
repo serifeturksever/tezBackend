@@ -111,8 +111,10 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let users = []
     let companyUsers = await getCompanyUsers(company_id);
     for(let i=0;i<companyUsers.length;i++) {
-      let user = await getUserWithId(companyUsers[i]);
-      users.push(user)
+      let user = await getUserWithId(companyUsers[i])
+      if(!users.includes(user)){
+        users.push(user)
+      }
     }
     return Promise.resolve(users);
   }

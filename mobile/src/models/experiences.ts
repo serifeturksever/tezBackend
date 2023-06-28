@@ -30,6 +30,26 @@ export const createExperience = async (experience: EXPERIENCE): Promise<any> => 
   return collectionWrite.insertOne(experience)
 }
 
+export const updateExperience = async (experience: EXPERIENCE): Promise<any> => {
+  return collectionWrite.updateOne({"_id": experience._id},{"$set": experience})
+}
+
+export const deleteExperience = async (experienceId: ObjectId): Promise<any> => {
+  let result = await collectionWrite.deleteOne({"_id": experienceId, "external": true})
+
+  if(result && result.deletedCount == 1){
+    return Promise.resolve({
+      "status": "ok",
+      "msg": "Experience is deleted successfully"
+    })
+  } else {
+    return Promise.resolve({
+      "status": "error",
+      "msg": "Experience could not be deleted"
+    })
+  }
+}
+
 export const getUserExperiences = async (userId: ObjectId): Promise<any> => {
   return collectionRead.find({"user_id": userId}).toArray()
 }

@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.filterEducations = exports.getUserEducations = exports.getEducations = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('m_educations');
-const collectionWrite = app_1.mongodbWrite.collection('m_educations');
+const collectionRead = app_1.mongodbRead.collection('educations');
+const collectionWrite = app_1.mongodbWrite.collection('educations');
 const getEducations = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });

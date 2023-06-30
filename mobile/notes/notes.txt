@@ -21,3 +21,5 @@ docker rm ne yapıyor bilmiyorum
 docker images ile isim verdiğin dockerı da çağırabilirsin
 docker build -t mobile . olarak build et dockerı
 docker run -p 9001:3002 mail ilk kısım docker içi ikinci kısım app içi
+
+Notification kısmında course için çalışılan estabilshment/Kurum bilgilerini göndermedik kalsın o şu an için

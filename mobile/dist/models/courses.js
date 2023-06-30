@@ -11,14 +11,49 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.filterCourses = exports.getUserCourses = exports.getCourses = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('m_courses');
-const collectionWrite = app_1.mongodbWrite.collection('m_courses');
+const collectionRead = app_1.mongodbRead.collection('courses');
+const collectionWrite = app_1.mongodbWrite.collection('courses');
 const getCourses = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getCourses = getCourses;
 const getUserCourses = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    return collectionRead.find({ "user_id": userId }).toArray();
+    // return collectionRead.find({"user_id": userId}).toArray()
+    return collectionRead.aggregate([
+        {
+            '$match': {
+                'user_id': userId
+            }
+        }, {
+            '$lookup': {
+                'from': 'companies',
+                'localField': 'company_id',
+                'foreignField': '_id',
+                'as': 'company'
+            }
+        }, {
+            '$addFields': {
+                'company': {
+                    '$arrayElemAt': [
+                        '$company', 0
+                    ]
+                },
+                'company_name': {
+                    '$arrayElemAt': [
+                        '$company.name', 0
+                    ]
+                }
+            }
+        }, {
+            '$project': {
+                '_id': 1,
+                'title': 1,
+                'user_id': 1,
+                'company_id': 1,
+                'company_name': '$company_name'
+            }
+        }
+    ]).toArray();
 });
 exports.getUserCourses = getUserCourses;
 const filterCourses = (title, company_id) => __awaiter(void 0, void 0, void 0, function* () {

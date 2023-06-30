@@ -11,5 +11,4 @@ export const _filter = async (req,res) => {
 export const _getUserSkills = async(req,res) => {
     let data = await getUserSkills(new ObjectId(req.body.user_id))
     if(data){res.send(data)} else {console.log("data yok")}
-
 }

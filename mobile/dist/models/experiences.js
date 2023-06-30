@@ -9,18 +9,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getFilteredExperiences = exports.getCompanyUsers = exports.filterExperiences = exports.getUserExperiences = exports.createExperience = exports.getExperiences = void 0;
+exports.getFilteredExperiences = exports.getCompanyUsers = exports.filterExperiences = exports.getUserExperiences = exports.deleteExperience = exports.updateExperience = exports.createExperience = exports.getCompanyExperienceCount = exports.getExperiences = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('m_experiences');
-const collectionWrite = app_1.mongodbWrite.collection('m_experiences');
+const collectionRead = app_1.mongodbRead.collection('experiences');
+const collectionWrite = app_1.mongodbWrite.collection('experiences');
 const getExperiences = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getExperiences = getExperiences;
+const getCompanyExperienceCount = (company_id) => __awaiter(void 0, void 0, void 0, function* () {
+    let companyExperienceCount = yield (0, exports.getCompanyUsers)(company_id);
+    return {
+        "count": companyExperienceCount.length
+    };
+});
+exports.getCompanyExperienceCount = getCompanyExperienceCount;
 const createExperience = (experience) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionWrite.insertOne(experience);
 });
 exports.createExperience = createExperience;
+const updateExperience = (experience) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionWrite.updateOne({ "_id": experience._id }, { "$set": experience });
+});
+exports.updateExperience = updateExperience;
+const deleteExperience = (experienceId) => __awaiter(void 0, void 0, void 0, function* () {
+    let result = yield collectionWrite.deleteOne({ "_id": experienceId, "external": true });
+    if (result && result.deletedCount == 1) {
+        return Promise.resolve({
+            "status": "ok",
+            "msg": "Experience is deleted successfully"
+        });
+    }
+    else {
+        return Promise.resolve({
+            "status": "error",
+            "msg": "Experience could not be deleted"
+        });
+    }
+});
+exports.deleteExperience = deleteExperience;
 const getUserExperiences = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "user_id": userId }).toArray();
 });
@@ -69,7 +96,7 @@ const getCompanyUsers = (company_id) => __awaiter(void 0, void 0, void 0, functi
             '$group': {
                 '_id': '$company_id',
                 'users': {
-                    '$push': '$user_id'
+                    '$addToSet': '$user_id'
                 }
             }
         }, {

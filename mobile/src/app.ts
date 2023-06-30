@@ -29,6 +29,8 @@ import { router as courseRouter } from './routes/course/routes';
 import { router as languageRouter } from './routes/language/routes';
 import { router as companyRouter } from './routes/company/routes';
 import { router as memberRouter } from './routes/member/routes';
+import { router as followRouter } from './routes/follow/routes';
+import { router as notificationRouter } from './routes/notification/routes';
 
 export const app = express();
 const http = require("http");
@@ -48,6 +50,8 @@ app
   .use('/language', languageRouter)
   .use('/company', companyRouter)
   .use('/member', memberRouter)
+  .use('/follow', followRouter)
+  .use('/notification', notificationRouter)
 
 app.get('/', (req, res) => {
   res.send('hii');

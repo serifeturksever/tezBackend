@@ -181,5 +181,4 @@ const _updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports._updatePassword = _updatePassword;
-// https://stackoverflow.com/questions/71270087/res-status-send-not-working-correctly-in-promise-all
 //# sourceMappingURL=post.js.map

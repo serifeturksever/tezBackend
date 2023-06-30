@@ -2,7 +2,7 @@ import express from 'express';
 import { createExperience, deleteExperience, filterExperiences, getCompanyExperienceCount, getCompanyUsers, getUserExperiences, updateExperience } from '../../models/experiences';
 import { ObjectId } from 'mongodb';
 import { createCompany, getCompanyIdWithName } from '../../models/companies';
-import { informFollowerMembersAboutMemberUpdateByEmail } from '../../models/members';
+import { informFollowerMembersAboutMemberExternalUpdateByEmail } from '../../models/members';
 
 export const _filter = async (req,res) => {
     let dummy_user = req.body
@@ -36,7 +36,7 @@ export const _filter = async (req,res) => {
     }
 
     if(req.body.isExperienceConformable){
-        await informFollowerMembersAboutMemberUpdateByEmail(new ObjectId(req.body.memberId),req.body.memberFullname, experience)
+        await informFollowerMembersAboutMemberExternalUpdateByEmail(new ObjectId(req.body.memberId),req.body.memberFullname, experience)
     }
     
     let data = await createExperience(experience)

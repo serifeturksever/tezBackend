@@ -21,6 +21,10 @@ export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
 }
 
+export const getUserFullName = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.findOne({"_id": userId},{"projection": {"_id": 0, "full_name": 1}})
+}
+
 export const getUserIdWithProfileLink = async (profileLink: string): Promise<any> => {
   return collectionRead.findOne(
     {

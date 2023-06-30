@@ -23,11 +23,15 @@ export const getMembers = async (): Promise<any> => {
   return collectionRead.find().toArray()
 }
 
-export const getFollowerEmaiById = async (fav_id: ObjectId): Promise<any> => {
+export const getMemberFullName = async (memberId: ObjectId): Promise<any> => {
+  return collectionRead.find({"_id": memberId},{"projection": {"_id": 0, "fullname": 1}})
+}
+
+export const getFollowerEmailById = async (fav_id: ObjectId): Promise<any> => {
   return collectionRead.findOne({"_id": fav_id},{"projection": {"email": 1}})
 }
 
-export const informFollowerMembersAboutMemberUpdateByEmail = async (fav_id: ObjectId, memberName: string, newExperience: EXPERIENCE): Promise<any> => {
+export const informFollowerMembersAboutMemberExternalUpdateByEmail = async (fav_id: ObjectId, memberName: string, newExperience: EXPERIENCE): Promise<any> => {
   let willInformMemberEmails = []
   let willInformUserIds = await getFollowerMembers(fav_id, "member");
   if(willInformUserIds.length == 0){
@@ -35,7 +39,7 @@ export const informFollowerMembersAboutMemberUpdateByEmail = async (fav_id: Obje
   }
   try {
     for(let i=0; i < willInformUserIds[0].followers.length;i++){
-      let memberMail = await getFollowerEmaiById(willInformUserIds[0].followers[i]);
+      let memberMail = await getFollowerEmailById(willInformUserIds[0].followers[i]);
       if(memberMail){ willInformMemberEmails.push(memberMail.email) }
     }
   
@@ -58,7 +62,6 @@ export const informFollowerMembersAboutMemberUpdateByEmail = async (fav_id: Obje
   } catch(e) {
     console.error(e)
   }
-
 }
 
 export const isUsernameExist = async (username: string): Promise<any> => {

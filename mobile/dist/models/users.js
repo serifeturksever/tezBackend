@@ -9,18 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAbilityUserId = exports.getFilteredUsers = exports.getCompanyUsersAsUserObj = exports.getUsersWithUserIds = exports.getUserWithId = exports.filterUsers = exports.addMemberIdToUser = exports.getUserIdWithProfileLink = exports.getUsers = void 0;
+exports.getAbilityUserId = exports.getFilteredUsers = exports.getCompanyUsersAsUserObj = exports.getUsersWithUserIds = exports.getUserWithId = exports.filterUsers = exports.addMemberIdToUser = exports.getUserIdWithProfileLink = exports.getUserFullName = exports.getUsers = void 0;
 const mongodb_1 = require("mongodb");
 const app_1 = require("../app");
 const experiences_1 = require("./experiences");
 const skills_1 = require("./skills");
 const languages_1 = require("./languages");
-const collectionRead = app_1.mongodbRead.collection('m_users');
-const collectionWrite = app_1.mongodbWrite.collection('m_users');
+const collectionRead = app_1.mongodbRead.collection('users');
+const collectionWrite = app_1.mongodbWrite.collection('users');
 const getUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getUsers = getUsers;
+const getUserFullName = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.findOne({ "_id": userId }, { "projection": { "_id": 0, "full_name": 1 } });
+});
+exports.getUserFullName = getUserFullName;
 const getUserIdWithProfileLink = (profileLink) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({
         "profileLink": profileLink
@@ -97,7 +101,9 @@ const getCompanyUsersAsUserObj = (company_id) => __awaiter(void 0, void 0, void 
     let companyUsers = yield (0, experiences_1.getCompanyUsers)(company_id);
     for (let i = 0; i < companyUsers.length; i++) {
         let user = yield (0, exports.getUserWithId)(companyUsers[i]);
-        users.push(user);
+        if (!users.includes(user)) {
+            users.push(user);
+        }
     }
     return Promise.resolve(users);
 });

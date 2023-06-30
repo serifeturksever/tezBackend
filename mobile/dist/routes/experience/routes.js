@@ -13,5 +13,8 @@ exports.router
     .post('/filter', post_1._filter)
     .post('/getUserExperiences', post_1._getUserExperiences)
     .post('/getCompanyUsers', post_1._getCompanyUsers)
-    .post('/createExperience', post_1._createExperience);
+    .post('/createExperience', post_1._createExperience)
+    .post('/delete', post_1._deleteExperience)
+    .post('/update', post_1._updateExperience)
+    .post('/companyExperienceCount', post_1._getCompanyExperienceCount);
 //# sourceMappingURL=routes.js.map

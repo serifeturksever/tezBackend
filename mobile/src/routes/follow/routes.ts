@@ -1,7 +1,9 @@
 import express from 'express';
-import { _createFollow } from './post';
+import { _getMemberNotifyUsers, _getNotifiedUsers, _updateFollow } from './post';
 
 export const router = express.Router();
 
 router
-  .post('/create', _createFollow)
+  .post('/update', _updateFollow)
+  .post('/getMemberNotifyUsers', _getMemberNotifyUsers)
+  .post('/getNotifiedUsers', _getNotifiedUsers)

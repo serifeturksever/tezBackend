@@ -130,6 +130,8 @@ export const filterUsers = async (params: USER): Promise<any> => {
     const filteredExperiences = filterObj["experiences"] != "" ? await getFilteredExperiences(filterObj["experiences"]) : []
     const filteredLanguages = filterObj["languages"] != "" ? await getFilteredLanguages(filterObj["languages"]) : []
 
+    console.log(filteredSkills)
+
     const responses =  await Promise.all([
       getAbilityUserId(filterObj, "skills",filteredSkills),
       getAbilityUserId(filterObj, "experiences", filteredExperiences),
@@ -164,9 +166,10 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let mainAbilityArr = []
     if(abilityObject[abilityString] != "" && filteredArray.length > 0){
       filteredArray.map(ability => {
-        if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
-          mainAbilityArr.push(ability["_id"].toString())
-        }
+        // if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
+        //   mainAbilityArr.push(ability["_id"].toString())
+        // }
+        mainAbilityArr.push(ability["_id"].toString())
       })
     }
 

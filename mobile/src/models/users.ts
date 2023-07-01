@@ -130,8 +130,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
     const filteredExperiences = filterObj["experiences"] != "" ? await getFilteredExperiences(filterObj["experiences"]) : []
     const filteredLanguages = filterObj["languages"] != "" ? await getFilteredLanguages(filterObj["languages"]) : []
 
-    console.log(filteredSkills)
-
     const responses =  await Promise.all([
       getAbilityUserId(filterObj, "skills",filteredSkills),
       getAbilityUserId(filterObj, "experiences", filteredExperiences),

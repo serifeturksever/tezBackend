@@ -21,6 +21,10 @@ export const getUsers = async (): Promise<any> => {
   return collectionRead.find().toArray()
 }
 
+export const getUserFullName = async (userId: ObjectId): Promise<any> => {
+  return collectionRead.findOne({"_id": userId},{"projection": {"_id": 0, "full_name": 1}})
+}
+
 export const getUserIdWithProfileLink = async (profileLink: string): Promise<any> => {
   return collectionRead.findOne(
     {
@@ -111,8 +115,10 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let users = []
     let companyUsers = await getCompanyUsers(company_id);
     for(let i=0;i<companyUsers.length;i++) {
-      let user = await getUserWithId(companyUsers[i]);
-      users.push(user)
+      let user = await getUserWithId(companyUsers[i])
+      if(!users.includes(user)){
+        users.push(user)
+      }
     }
     return Promise.resolve(users);
   }
@@ -158,9 +164,10 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let mainAbilityArr = []
     if(abilityObject[abilityString] != "" && filteredArray.length > 0){
       filteredArray.map(ability => {
-        if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
-          mainAbilityArr.push(ability["_id"].toString())
-        }
+        // if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
+        //   mainAbilityArr.push(ability["_id"].toString())
+        // }
+        mainAbilityArr.push(ability["_id"].toString())
       })
     }
 

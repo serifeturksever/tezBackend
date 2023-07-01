@@ -14,8 +14,8 @@ const app_1 = require("../app");
 const users_1 = require("./users");
 const companies_1 = require("./companies");
 const members_1 = require("./members");
-const collectionRead = app_1.mongodbRead.collection("m_favourites");
-const collectionWrite = app_1.mongodbWrite.collection("m_favourites");
+const collectionRead = app_1.mongodbRead.collection("favourites");
+const collectionWrite = app_1.mongodbWrite.collection("favourites");
 const getUserFavs = (userId, fav_type) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "user_id": userId, "fav_type": fav_type }).toArray();
 });

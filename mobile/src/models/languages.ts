@@ -66,9 +66,11 @@ export const filterLanguages = async (params: LANGUAGE): Promise<any> => {
   export const getFilteredLanguages = async (languages: string): Promise<any> => {
     let filter = {}
     let languagesObjArr = []
-    languages.split(",").map(skill => {
+    languages.split(",").map(language => {
       let obj = {
-        "title": skill
+        "title": {
+          '$regex': new RegExp(`${language}`, 'i')
+        }
       }
       languagesObjArr.push(obj)
     })
@@ -81,6 +83,15 @@ export const filterLanguages = async (params: LANGUAGE): Promise<any> => {
 
     return collectionRead.aggregate(
       [
+        {
+          '$project': {
+            '_id': 1, 
+            'title': {
+              '$toLower': '$title'
+            }, 
+            'user_id': 1
+          }
+        },
         {
             '$match': filter
         }, {

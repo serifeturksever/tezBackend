@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports._getUsersWithUserIds = exports._getFilteredUsers = exports._getCompanyUsersAsUserObj = exports._filter = void 0;
 const users_1 = require("../../models/users");
 const mongodb_1 = require("mongodb");
-// What types of POST should be included ?
 const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let dummy_user = req.body;
     let data = yield (0, users_1.filterUsers)(dummy_user);
@@ -26,6 +25,7 @@ const _filter = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports._filter = _filter;
 const _getCompanyUsersAsUserObj = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let data = yield (0, users_1.getCompanyUsersAsUserObj)(new mongodb_1.ObjectId(req.body.company_id));
+    console.log("data: ", data);
     if (data) {
         res.send(data);
     }

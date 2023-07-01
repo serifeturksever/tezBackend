@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMemberWithId = exports.getMemberIdWithEmail = exports.updateMemberBookmark = exports.connectAccountWithLinkedIn = exports.addUserIdToMember = exports.getCompanyWithId = exports.isUsernameExist = exports.informFollowerMembersAboutMemberUpdateByEmail = exports.getFollowerEmaiById = exports.getMembers = void 0;
+exports.getMemberWithId = exports.getMemberIdWithEmail = exports.updateMemberBookmark = exports.connectAccountWithLinkedIn = exports.addUserIdToMember = exports.getCompanyWithId = exports.isUsernameExist = exports.informFollowerMembersAboutMemberExternalUpdateByEmail = exports.getFollowerEmailById = exports.getMemberFullName = exports.getMembers = void 0;
 const app_1 = require("../app");
 const users_1 = require("./users");
 const favourites_1 = require("./favourites");
@@ -20,36 +20,46 @@ const getMembers = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });
 exports.getMembers = getMembers;
-const getFollowerEmaiById = (fav_id) => __awaiter(void 0, void 0, void 0, function* () {
+const getMemberFullName = (memberId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.find({ "_id": memberId }, { "projection": { "_id": 0, "fullname": 1 } });
+});
+exports.getMemberFullName = getMemberFullName;
+const getFollowerEmailById = (fav_id) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({ "_id": fav_id }, { "projection": { "email": 1 } });
 });
-exports.getFollowerEmaiById = getFollowerEmaiById;
-const informFollowerMembersAboutMemberUpdateByEmail = (fav_id, memberName, newExperience) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getFollowerEmailById = getFollowerEmailById;
+const informFollowerMembersAboutMemberExternalUpdateByEmail = (fav_id, memberName, newExperience) => __awaiter(void 0, void 0, void 0, function* () {
     let willInformMemberEmails = [];
     let willInformUserIds = yield (0, favourites_1.getFollowerMembers)(fav_id, "member");
-    console.log(fav_id);
-    console.log(willInformUserIds);
-    for (let i = 0; i < willInformUserIds.length; i++) {
-        let memberMail = yield (0, exports.getFollowerEmaiById)(willInformUserIds[i]);
-        if (memberMail) {
-            willInformMemberEmails.push(memberMail.email);
-        }
+    if (willInformUserIds.length == 0) {
+        return;
     }
-    let data = yield (0, microServices_1.ServicesRequest)(null, // -> Express.request
-    null, // -> Express.response
-    "MAILER", // -> İsteğin atıldığı servis MAILER: mail servisi
-    "mail/informFollowerMembers", // -> isteğin atıldığı path
-    "POST", // HTTP request tipi
-    {
-        "emails": willInformMemberEmails,
-        "memberName": memberName,
-        "newExperience": newExperience
-    }, {
-        "requestFromInside": "ms",
-        "ms": "MOBILE" // isteği atan servis
-    });
+    try {
+        for (let i = 0; i < willInformUserIds[0].followers.length; i++) {
+            let memberMail = yield (0, exports.getFollowerEmailById)(willInformUserIds[0].followers[i]);
+            if (memberMail) {
+                willInformMemberEmails.push(memberMail.email);
+            }
+        }
+        let data = yield (0, microServices_1.ServicesRequest)(null, // -> Express.request
+        null, // -> Express.response
+        "MAILER", // -> İsteğin atıldığı servis MAILER: mail servisi
+        "mail/informFollowerMembers", // -> isteğin atıldığı path
+        "POST", // HTTP request tipi
+        {
+            "emails": willInformMemberEmails,
+            "memberName": memberName,
+            "newExperience": newExperience
+        }, {
+            "requestFromInside": "ms",
+            "ms": "MOBILE" // isteği atan servis
+        });
+    }
+    catch (e) {
+        console.error(e);
+    }
 });
-exports.informFollowerMembersAboutMemberUpdateByEmail = informFollowerMembersAboutMemberUpdateByEmail;
+exports.informFollowerMembersAboutMemberExternalUpdateByEmail = informFollowerMembersAboutMemberExternalUpdateByEmail;
 const isUsernameExist = (username) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.findOne({
         "username": username

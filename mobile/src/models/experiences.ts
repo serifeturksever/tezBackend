@@ -20,14 +20,34 @@ export const getExperiences = async (): Promise<any> => {
 }
 
 export const getCompanyExperienceCount = async (company_id: ObjectId): Promise<any> => {
-  let count = (await collectionRead.find({"company_id": company_id}).toArray()).length
+  let companyExperienceCount = await getCompanyUsers(company_id);
   return {
-    "count": count
+    "count": companyExperienceCount.length
   }
 }
 
 export const createExperience = async (experience: EXPERIENCE): Promise<any> => {
   return collectionWrite.insertOne(experience)
+}
+
+export const updateExperience = async (experience: EXPERIENCE): Promise<any> => {
+  return collectionWrite.updateOne({"_id": experience._id},{"$set": experience})
+}
+
+export const deleteExperience = async (experienceId: ObjectId): Promise<any> => {
+  let result = await collectionWrite.deleteOne({"_id": experienceId, "external": true})
+
+  if(result && result.deletedCount == 1){
+    return Promise.resolve({
+      "status": "ok",
+      "msg": "Experience is deleted successfully"
+    })
+  } else {
+    return Promise.resolve({
+      "status": "error",
+      "msg": "Experience could not be deleted"
+    })
+  }
 }
 
 export const getUserExperiences = async (userId: ObjectId): Promise<any> => {
@@ -87,7 +107,7 @@ export const filterExperiences = async (params: EXPERIENCE): Promise<any> => {
           '$group': {
             '_id': '$company_id', 
             'users': {
-              '$push': '$user_id'
+              '$addToSet': '$user_id'
             }
           }
         }, {
@@ -107,9 +127,11 @@ export const filterExperiences = async (params: EXPERIENCE): Promise<any> => {
 export const getFilteredExperiences = async (experiences: string): Promise<any> => {
     let filter = {}
     let experiencesObjArr = []
-    experiences.split(",").map(skill => {
+    experiences.split(",").map(experience => {
       let obj = {
-        "name": skill
+        "name": {
+          '$regex': new RegExp(`${experience}`, 'i')
+        }
       }
       experiencesObjArr.push(obj)
     })
@@ -122,6 +144,15 @@ export const getFilteredExperiences = async (experiences: string): Promise<any> 
 
     return collectionRead.aggregate(
       [
+        {
+          '$project': {
+            '_id': 1, 
+            'name': {
+              '$toLower': '$title'
+            }, 
+            'user_id': 1
+          }
+        },
         {
             '$match': filter
         }, {

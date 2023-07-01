@@ -20,6 +20,10 @@ export const getCompanyIdWithName = async (companyName: string): Promise<any> =>
   return collectionRead.findOne({"name": companyName},{"projection": {"_id":1}})
 }
 
+export const getCompanyNameWithId = async (companyId: ObjectId): Promise<any> => {
+  return collectionRead.findOne({"_id": companyId},{"projection": {"_id":0,"name": 1}})
+}
+
 export const createCompany = async (company: COMPANY): Promise<any> => {
   return collectionWrite.insertOne(company);
 }

@@ -1,8 +1,8 @@
 import express from 'express';
-import { createExperience, filterExperiences, getCompanyExperienceCount, getCompanyUsers, getUserExperiences } from '../../models/experiences';
+import { createExperience, deleteExperience, filterExperiences, getCompanyExperienceCount, getCompanyUsers, getUserExperiences, updateExperience } from '../../models/experiences';
 import { ObjectId } from 'mongodb';
 import { createCompany, getCompanyIdWithName } from '../../models/companies';
-import { informFollowerMembersAboutMemberUpdateByEmail } from '../../models/members';
+import { informFollowerMembersAboutMemberExternalUpdateByEmail } from '../../models/members';
 
 export const _filter = async (req,res) => {
     let dummy_user = req.body
@@ -36,7 +36,7 @@ export const _filter = async (req,res) => {
     }
 
     if(req.body.isExperienceConformable){
-        await informFollowerMembersAboutMemberUpdateByEmail(new ObjectId(req.body.memberId),req.body.memberFullname, experience)
+        await informFollowerMembersAboutMemberExternalUpdateByEmail(new ObjectId(req.body.memberId),req.body.memberFullname, experience)
     }
     
     let data = await createExperience(experience)
@@ -66,4 +66,57 @@ export const _getCompanyUsers = async(req,res) => {
 export const _getCompanyExperienceCount = async(req,res) => {
     let data = await getCompanyExperienceCount(new ObjectId(req.body.companyId))
     if(data){res.send(data)} else {console.log("data yok")}
+}
+
+export const _deleteExperience = async(req,res) => {
+    console.log(req.body.experienceId)
+    let experienceId = new ObjectId(req.body.experienceId);
+    let data = await deleteExperience(experienceId)
+    if(data){res.send(data)} else {console.log("data yok")}
+}
+
+export const _updateExperience = async(req,res) => {
+    console.log("update")
+    let company_id = await getCompanyIdWithName(req.body.experienceCompany);
+    if(!company_id){
+        let company = {
+            name: req.body.experienceCompany,
+            image: "",
+            type: "Company",
+            isBookmarked: false
+        }
+        let res = await createCompany(company);
+        company_id = res.insertedId;
+        console.log("inserted company id", company_id)
+    } else {
+        company_id = company_id["_id"]
+    }
+    let experience = {
+        "_id": new ObjectId(req.body.experienceId),
+        "name": req.body.experienceName,
+        "company_id": company_id,
+        "establishment": req.body.experienceCompany,
+        "range": req.body.experienceDate,
+        "location": req.body.experienceLocation,
+    }
+    let data = await updateExperience(experience)
+    console.log("data",data)
+    if(data){
+        if(data.modifiedCount == 0){
+            res.send({
+                "status": "error",
+                "msg": "Experience güncellenemedi"
+            })
+        } else {
+            res.send({
+                "status": "ok",
+                "msg": "Experience Başarıyla güncellendi"
+            })
+        }
+    } else {
+        res.send({
+            "status": "error",
+            "msg": "Experience güncellenemedi"
+        })
+    }
 }

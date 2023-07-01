@@ -11,8 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFilteredLanguages = exports.filterLanguages = exports.getUserLanguages = exports.getLanguages = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('m_languages');
-const collectionWrite = app_1.mongodbWrite.collection('m_languages');
+const collectionRead = app_1.mongodbRead.collection('languages');
+const collectionWrite = app_1.mongodbWrite.collection('languages');
 const getLanguages = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find().toArray();
 });

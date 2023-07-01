@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.filterCompanies = exports.getUserCompanies = exports.updateCompanyBookmark = exports.getCompanyWithId = exports.createCompany = exports.getCompanyIdWithName = exports.getCompanies = void 0;
+exports.filterCompanies = exports.getUserCompanies = exports.updateCompanyBookmark = exports.getCompanyWithId = exports.createCompany = exports.getCompanyNameWithId = exports.getCompanyIdWithName = exports.getCompanies = void 0;
 const app_1 = require("../app");
-const collectionRead = app_1.mongodbRead.collection('m_companies');
-const collectionWrite = app_1.mongodbWrite.collection('m_companies');
+const collectionRead = app_1.mongodbRead.collection('companies');
+const collectionWrite = app_1.mongodbWrite.collection('companies');
 const getCompanies = () => __awaiter(void 0, void 0, void 0, function* () {
     return collectionRead.find({ "type": "Company" }).toArray();
 });
@@ -21,6 +21,10 @@ const getCompanyIdWithName = (companyName) => __awaiter(void 0, void 0, void 0, 
     return collectionRead.findOne({ "name": companyName }, { "projection": { "_id": 1 } });
 });
 exports.getCompanyIdWithName = getCompanyIdWithName;
+const getCompanyNameWithId = (companyId) => __awaiter(void 0, void 0, void 0, function* () {
+    return collectionRead.findOne({ "_id": companyId }, { "projection": { "_id": 0, "name": 1 } });
+});
+exports.getCompanyNameWithId = getCompanyNameWithId;
 const createCompany = (company) => __awaiter(void 0, void 0, void 0, function* () {
     return collectionWrite.insertOne(company);
 });

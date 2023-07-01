@@ -26,6 +26,8 @@ const routes_7 = require("./routes/course/routes");
 const routes_8 = require("./routes/language/routes");
 const routes_9 = require("./routes/company/routes");
 const routes_10 = require("./routes/member/routes");
+const routes_11 = require("./routes/follow/routes");
+const routes_12 = require("./routes/notification/routes");
 exports.app = (0, express_1.default)();
 const http = require("http");
 exports.server = http.createServer(exports.app);
@@ -42,7 +44,9 @@ exports.app
     .use('/course', routes_7.router)
     .use('/language', routes_8.router)
     .use('/company', routes_9.router)
-    .use('/member', routes_10.router);
+    .use('/member', routes_10.router)
+    .use('/follow', routes_11.router)
+    .use('/notification', routes_12.router);
 exports.app.get('/', (req, res) => {
     res.send('hii');
 });

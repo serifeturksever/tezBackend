@@ -1,5 +1,5 @@
 import express from 'express';
-import { Emailer,forgotPasswordEmailTemplate,informMemberFollowersAboutExperienceUpdate,newUserEmailTemplate, updatePasswordEmailTemplate } from '../../services/mailService';
+import { Emailer,forgotPasswordEmailTemplate,informMemberFollowersAboutExperienceUpdate,newUserEmailTemplate, notifyUserFollowersAboutUpdates, updatePasswordEmailTemplate } from '../../services/mailService';
 
 let emailer = new Emailer()
 export const _sendRegisterMail = async (req,res) => {
@@ -30,4 +30,20 @@ export const _informFollowerMembers = async (req,res) => {
       emailer.sendEmail(await informMemberFollowersAboutExperienceUpdate(emails[i],memberName,newExperience));
    }
    res.send({"status": "ok"})
+}
+
+
+export const _notifyUserFollowersAboutUpdates = async (req,res) => {
+   let emails = req.body.emails
+   let userName = req.body.userName
+   let updatedExperiences = req.body.updatedExperiences
+   let updatedSkills = req.body.updatedSkills
+   let updatedCourses = req.body.updatedCourses
+   let updatedEducations = req.body.updatedEducations
+   let updatedLanguages = req.body.updatedLanguages
+
+   for(let i=0;i < emails.length;i++){
+      emailer.sendEmail(await notifyUserFollowersAboutUpdates(emails[i],userName,updatedExperiences,updatedSkills,updatedCourses,updatedEducations,updatedLanguages));
+   }
+   res.send({"status": "ok","msg": "mails have sent successfully!"})
 }

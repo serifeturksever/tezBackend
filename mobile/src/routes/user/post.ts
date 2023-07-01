@@ -10,6 +10,7 @@ export const _filter = async (req,res) => {
 
  export const _getCompanyUsersAsUserObj = async (req,res) => {
     let data = await getCompanyUsersAsUserObj(new ObjectId(req.body.company_id))
+    console.log("data: ", data)
     if(data){res.send(data)} else {console.log("data yok")}
  }
 

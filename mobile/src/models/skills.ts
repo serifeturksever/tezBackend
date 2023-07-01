@@ -65,7 +65,9 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
     let skillsObjArr = []
     skills.split(",").map(skill => {
       let obj = {
-        "title": skill
+        "title": {
+          '$regex': new RegExp(`${skill}`, 'i')
+        }
       }
       skillsObjArr.push(obj)
     })
@@ -76,8 +78,19 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
       filter = skillsObjArr[0]
     }
 
+    console.log(skills,skillsObjArr)
+
     return collectionRead.aggregate(
       [
+        {
+          '$project': {
+            '_id': 1, 
+            'title': {
+              '$toLower': '$title'
+            }, 
+            'user_id': 1
+          }
+        },
         {
             '$match': filter
         }, {

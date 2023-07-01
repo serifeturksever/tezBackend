@@ -23,3 +23,8 @@ docker build -t mobile . olarak build et dockerı
 docker run -p 9001:3002 mail ilk kısım docker içi ikinci kısım app içi
 
 Notification kısmında course için çalışılan estabilshment/Kurum bilgilerini göndermedik kalsın o şu an için
+
+filtre esnasında türkçe karakterlere dikkat edilmeli
+İngilizce search edilemiyor örneğin
+
+özel filtreleme alanında education ve course yok neden ? bak sonra !

@@ -127,9 +127,11 @@ export const filterExperiences = async (params: EXPERIENCE): Promise<any> => {
 export const getFilteredExperiences = async (experiences: string): Promise<any> => {
     let filter = {}
     let experiencesObjArr = []
-    experiences.split(",").map(skill => {
+    experiences.split(",").map(experience => {
       let obj = {
-        "name": skill
+        "name": {
+          '$regex': new RegExp(`${experience}`, 'i')
+        }
       }
       experiencesObjArr.push(obj)
     })
@@ -142,6 +144,15 @@ export const getFilteredExperiences = async (experiences: string): Promise<any> 
 
     return collectionRead.aggregate(
       [
+        {
+          '$project': {
+            '_id': 1, 
+            'name': {
+              '$toLower': '$title'
+            }, 
+            'user_id': 1
+          }
+        },
         {
             '$match': filter
         }, {

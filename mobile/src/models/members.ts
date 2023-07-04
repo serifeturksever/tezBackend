@@ -96,7 +96,6 @@ export const addUserIdToMember = async (userId: ObjectId, memberId: ObjectId): P
 
 export const connectAccountWithLinkedIn = async (memberId: ObjectId, profileLink: string): Promise<any> => {
   let relatedUserId = await getUserIdWithProfileLink(profileLink);
-  console.log("relatedUserId ===> ",relatedUserId)
   if(relatedUserId){
     await Promise.all([
       addMemberIdToUser(memberId,profileLink),

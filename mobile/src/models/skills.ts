@@ -78,8 +78,6 @@ export const filterSkills = async (params: SKILL): Promise<any> => {
       filter = skillsObjArr[0]
     }
 
-    console.log(skills,skillsObjArr)
-
     return collectionRead.aggregate(
       [
         {

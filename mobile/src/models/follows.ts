@@ -27,7 +27,6 @@ export const deleteFollow = async (follow: FOLLOW): Promise<any> => {
 export const updateFollow = async (follow: FOLLOW): Promise<any> => {
     if(follow.isAdded){
         let result = await collectionWrite.insertOne(follow);
-        console.log(result)
         if(result.insertedId) {
             return Promise.resolve({
                 "status": "ok",

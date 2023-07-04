@@ -164,9 +164,6 @@ export const filterUsers = async (params: USER): Promise<any> => {
     let mainAbilityArr = []
     if(abilityObject[abilityString] != "" && filteredArray.length > 0){
       filteredArray.map(ability => {
-        // if(ability[mongoEntity].length == abilityObject[abilityString].split(",").length){
-        //   mainAbilityArr.push(ability["_id"].toString())
-        // }
         mainAbilityArr.push(ability["_id"].toString())
       })
     }

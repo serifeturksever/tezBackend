@@ -21,7 +21,6 @@ export const _filter = async (req,res) => {
         }
         let res = await createCompany(company);
         company_id = res.insertedId;
-        console.log("inserted company id", company_id)
     } else {
         company_id = company_id["_id"]
     }
@@ -69,14 +68,12 @@ export const _getCompanyExperienceCount = async(req,res) => {
 }
 
 export const _deleteExperience = async(req,res) => {
-    console.log(req.body.experienceId)
     let experienceId = new ObjectId(req.body.experienceId);
     let data = await deleteExperience(experienceId)
     if(data){res.send(data)} else {console.log("data yok")}
 }
 
 export const _updateExperience = async(req,res) => {
-    console.log("update")
     let company_id = await getCompanyIdWithName(req.body.experienceCompany);
     if(!company_id){
         let company = {
@@ -100,7 +97,6 @@ export const _updateExperience = async(req,res) => {
         "location": req.body.experienceLocation,
     }
     let data = await updateExperience(experience)
-    console.log("data",data)
     if(data){
         if(data.modifiedCount == 0){
             res.send({

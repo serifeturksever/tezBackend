@@ -2,15 +2,6 @@ import express from 'express';
 import { ObjectId } from 'mongodb';
 import { getNotifiedUsers, getUserFollowingsAsIdArray, updateFollow } from '../../models/follows';
 
-
-// export const _getUserFollowsAsIdArray = async(req,res) => {
-//     let follow = {
-//         "user_id": new ObjectId(req.body.userId),
-//     }
-//     let data = await createFollow(follow)
-//     if(data){res.send(data)} else {console.log("data yok")}
-// }
-
 export const _updateFollow = async(req,res) => {
     let follow = {
         "member_id": new ObjectId(req.body.memberId),

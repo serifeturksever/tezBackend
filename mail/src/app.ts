@@ -7,10 +7,10 @@ if (process.env.NODE_ENV != "production") {
   }
 
   import { Db, Decimal128, MongoClient, ObjectId } from 'mongodb';
-  const mongoClient: MongoClient = new MongoClient("mongodb+srv://serifeturksever:5TuhBQ0KmdHfQ6cx@cluster0.9ioa5np.mongodb.net/");
+  const mongoClient: MongoClient = new MongoClient("<mongodb-connection-url>");
                                                     
-  export const mongodbRead: Db = mongoClient.db("bitirmeteziMail");
-  export const mongodbWrite: Db = mongoClient.db("bitirmeteziMail");
+  export const mongodbRead: Db = mongoClient.db("<database-name>");
+  export const mongodbWrite: Db = mongoClient.db("<database-name>");
   
   import express from 'express';
   import cors from 'cors';

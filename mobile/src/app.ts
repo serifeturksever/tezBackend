@@ -5,9 +5,9 @@ if (process.env.NODE_ENV != "production") {
     dotenv.config();
   }
 import { Db, Decimal128, MongoClient, ObjectId } from 'mongodb';
-const mongoClient: MongoClient = new MongoClient("mongodb+srv://serifeturksever:lm3vvXWJLBfrYhmh@cluster0.pgszwa5.mongodb.net/test");
-export const mongodbRead: Db = mongoClient.db("bitirmetezi");
-export const mongodbWrite: Db = mongoClient.db("bitirmetezi");
+const mongoClient: MongoClient = new MongoClient("<mongodb-connection-url");
+export const mongodbRead: Db = mongoClient.db("<database-name>");
+export const mongodbWrite: Db = mongoClient.db("<database-name>");
 
 import express from 'express';
 import cors from 'cors';

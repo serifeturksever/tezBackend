@@ -1,6 +1,6 @@
 FROM node:17
 
-WORKDIR /Users/yapikrediteknolojia.s./Desktop/personal-projects/tezBackend/mobile
+WORKDIR /Users/burhandundar/Desktop/personal-projects/tezBackend/mobile
 
 COPY package*.json ./
 

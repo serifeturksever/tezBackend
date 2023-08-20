@@ -1,6 +1,6 @@
 FROM node:17
 
-WORKDIR /Users/yapikrediteknolojia.s./Desktop/personal-projects/tezBackend/mail
+WORKDIR /Users/burhandundar/Desktop/personal-projects/tezBackend/mail
 
 COPY package*.json ./
 
